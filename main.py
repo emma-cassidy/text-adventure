@@ -45,7 +45,7 @@ Select your starting character:
 
 
 char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
-playerATK = (playerSTR * weapondamage) + playerLCK
+
 maxHP = playerHP
 
 def showInstructions():
@@ -53,10 +53,11 @@ def showInstructions():
 Welcome to EMMA RING, {char_class} {char_name}!
 ============================================================================================================================================
 Commands:
-  go [direction] (north, south, east, west)
-  get [item]     (item name)
-  use [item]     (item name)
-  attack [enemy]
+  go [direction]       (north, south, east, west)
+  get [item]           (item name)
+  use [item]           (item name)
+  map                  (shows map)
+  attack [enemy]       (initiates combat)
 ============================================================================================================================================
 ''')
 
@@ -67,8 +68,9 @@ def showStatus():
   #show current stats
   print(f'You have {playerHP} HP of a maximum {maxHP}, {playerSTR} strength, and {playerLCK} luck.')
   print(f'Your attack stat is {playerATK}.')
-  #show the current inventory
+  #show the current inventory and equipment
   print('Inventory : ' + str(inventory))
+  print('Equipment : ' + str(equipment))
   #print description if there is one
   if "desc" in rooms[currentRoom]:
     print((rooms[currentRoom]['desc']))
@@ -82,12 +84,9 @@ def showStatus():
     print('The boss ' + rooms[currentRoom]['boss'] + ' prepares to attack!')
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-# def startCombat():
-#   if rooms[currentRoom]['enemy'] == "Fallen Adventurer":
-
 
 inventory = []
-equipment = []
+equipment = ["Bare Hands"]
 
 rooms = {
 
@@ -98,23 +97,6 @@ rooms = {
 ============================================================================================================================================
 You are in a dank, dark cave, with a broken chain at your feet. Your neck is sore, as if you were restrained by it. The only way to go 
 is through the cave tunnel you see to your south.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-X    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                 },
@@ -128,50 +110,17 @@ X    □ __ □ __ □ __ □
 You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
 There are shuffling, moaning sounds coming from both directions.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-X __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
                 },
             'Cave Mouth - South' : {
                   'north' : 'Cave Tunnel',
+                  'east'  : 'Cliff Edge - East',
                   'enemy' : 'Feral Remnant',
                   'desc'  : '''
 ============================================================================================================================================
 The cave mouth faces out onto a sheer cliff opening. You see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
 In the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
 elsewhere. To your north is the cave tunnel.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-X __ □
 
 ============================================================================================================================================''',
                },
@@ -187,48 +136,15 @@ In the distance beyond the cloud and waves you see an endless abyss of darkness,
 elsewhere. To your west is the cave tunnel. To your south is the cliff edge, where you can hear a faint moaning. To your north, there seems
 to be a ledge you could climb.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ X    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
                },
             'Cliff Edge - East' : {
                   'north' : 'Cave Mouth - East',
+                  'west'  : 'Cave Mouth - South',
                   'enemy' : 'Whispering Mistborn',
                   'desc'  : '''
 ============================================================================================================================================
 You stand on the precipice, staring out into the silent darkness. There is no other way forward except back north to the cave mouth.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ X
 
 ============================================================================================================================================''',
                 },
@@ -240,23 +156,6 @@ MAP:
 ============================================================================================================================================
 You scramble onto the ledge, and to your east notice a wrought iron fence you could climb. To your north, there is a crack in a large stone
 wall, large enough for you to squeeze into. To your south below you lies the cave mouth.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    X __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                 },
@@ -271,23 +170,6 @@ From your location in the crevice of the thick stone wall, you notice what seems
 with rot and decay, punctured only by the fresh air flowing from the cliff ledge to your south. You hear movement in the building to your
 east. 
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     X __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Wrought Iron Fence' : {
@@ -298,23 +180,6 @@ MAP:
 ============================================================================================================================================
 From your position atop the wrought iron fence, to the east you spy what seems to be a derelict yet once loved garden, with a dried fountain, 
 barren soil and withered trees. To your south there are unmistakeably graves whose inhabitants' names have been lost to time.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ X __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -328,23 +193,6 @@ MAP:
 The graveyard is full of tombstones of varying shapes and sizes, with some modern black marble and others crumbling sandstone and lime. They
 have one thing in common - all have clearly been forgotten - but appear to be those of heroes, judging from the decayed and rusted weapons
 and shields littered around them in tribute. The iron fence is to your north, and to your east you see a disused training yard.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    X __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
             },
@@ -362,23 +210,6 @@ house. Directly north is a grand entryway into what appears to be some kind of m
 the blatant disrepair, standing tall and imposing, as sound and polished as the day it was made. The carvings of the tympanum above are
 unintelligble, however.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ X __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
                },
             'Disused Training Yard' : {
@@ -392,23 +223,6 @@ MAP:
 Rotten straw men lay strewn across the ground, clearly having been target practice in the past, surrounded by an assortment of old weapons.
 To the west lays the graveyard, and to the east, an old barracks building. North is the garden.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ X __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Carriage House' : {
@@ -420,23 +234,6 @@ MAP:
 The carriage house must have been a grand affair once, its simple design disguising the use of elegant woods in its construction. Rusted
 troughs lay to one side where horses must have been fed and watered by their coachmen. There are no signs of any vehicle or animal now save
 for a bent old wheel to one side in the dusty building. Looking out west, you see the garden and to the south, a similarly dusty barracks.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ X
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -451,23 +248,6 @@ You step through the splinters that were once a door into a musty old barracks. 
 no more than ten guards. There are still a few mouldy hay mattresses dotted around, and an assortment of old weaponry. West lays the training
 yard, and to the north is the carriage house.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ X   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Main Foyer' : {
@@ -478,23 +258,6 @@ MAP:
 ============================================================================================================================================
 The foyer seems out of place compared to outside - barring a little dust, it looks relatively modern, with ornate wainscoting in a lush dark
 wood with lighter appliques surrounding the doorway to the garden in the south and a similar doorway to the north. 
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    X    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -510,23 +273,6 @@ wooden pannelling are stonecarved reliefs of figures, each wearing distinct atti
 the same path you are on. There is an empty space, waiting for its next inhabitant. There are two doors, one to the west and one to the east.
 To the north, there seem to be two more, similarly on each side.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ X __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'The Maw Between Hours - Corridor' : {
@@ -538,23 +284,6 @@ MAP:
 ============================================================================================================================================
 The thick miasma of stench tainted by decay almost overwhelms you, but the gentle breeze through the crack in the west wall aids in your
 resolve. The otherwise fine hallway leads north to the foyer.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ X    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -569,23 +298,6 @@ The repugnant stench of decay and despair becomes suffocating as you near its so
 other doors, and to your south, the corridor with a crack in the wall to the outside. West lays a grand hall, where the source of the
 miasma appears to be.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ X __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
                },
             'The Maw Between Hours - Hall' : {
@@ -596,23 +308,6 @@ MAP:
 The hall must once have been a grand dining room, the polished marbled floor thick with a sludge that has the taint of rotten flesh and
 blood. The furniture, what is left of it, has all been swept to one side and there are distinct long bones of discarded limbs scattered
 amongst the filth.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     X __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -628,23 +323,6 @@ This foyer has a lilting sadness somehow upon it. Lost books litter the floor, a
 of the utmost import. To the south is a corridor, and to the east, an antechamber of some kind. To the west lays the long hallway of doors
 and forgotten faces.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ X __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'The Cradle That Remembers - Corridor' : {
@@ -658,23 +336,6 @@ MAP:
 Various faded artworks detail the walls, masking some of the faded silken wallpaper. There are indecipherable scrawls along the walls at
 intervals that appear to have been written at different times from the shades of the ink, yet strangely all with the same hand. To the east 
 the hall opens into a grand library, and to the north the foyer that leads back to the hall.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    X __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
             },
@@ -690,23 +351,6 @@ Old and overused furniture is strewn around the antechamber as if someone had be
 books surround the various seats like someone had worn out each in turn whilst searching for answers. To the south lays a grand library, and
 to the west, the foyer that leads back to the main hall.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ X
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'The Cradle That Remembers - Cradle' : {
@@ -718,23 +362,6 @@ MAP:
 The library houses thousands, if not more, books that once lurked on their many shelves. Cobwebs and filth cover most of the room, save for
 a corner where there had recently been activity. A solitary desk stands alone, covered in reams of parchment decorated in the same archaic
 script that adorns the walls of the corridor to the west. To the north lays the antechamber where someone had clearly been residing.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ X
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -749,24 +376,6 @@ The north end of the grand hall is as painstakingly decorated as its southern co
 adorn the walls above the familiar dark wainscoting - is that a hint of sadness you see on the faces? There are two doors, one to the west 
 and one to the east. Back south, you can vaguely make out the same in the darkness.
 
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ X __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Sepulchre of the Unmarked Step - Foyer' : {
@@ -778,23 +387,6 @@ MAP:
 ============================================================================================================================================
 This foyer has an uncanny stillness about it - the stillness of the dead. To the north lies a suspciously empty room, and to the east, a room
 with some form of workstation. The west holds the door returning to the hall.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ X __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -808,23 +400,6 @@ MAP:
 ============================================================================================================================================
 Other than what appears to be an empty stone casket laying on a flagstone floor, there is nothing of note in this dusty room. The foyer is
 back to the south, and to the east you can make of the distinctive vaulted appearance of an undercroft.
-
-MAP:
-               □
-               |
-     □ __ □    □    X __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
                },
@@ -841,23 +416,6 @@ in the centre and is covered with blackened red stains. To one side there are sh
 for stripping flesh from bone. There is a painting on the slab, eerily similar to the faces in the reliefs of the grand hallway, almost as 
 if to be used as a reference. To the north lays the vaulted arches of an undercroft, and to the west the foyer back to the main hall.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ X
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Sepulchre of the Unmarked Step - Undercroft' : {
@@ -869,23 +427,6 @@ MAP:
 You stand in the middle of a grand, vaulted room that houses sacks of materials in the corners. They spill out, seeming to be a cement of
 some description. Alongside them, there are a couple of skeletons in old ragged armour whose faces have been perfectly preserved as if alive
 yet smothered in plaster.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ X
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
             },
@@ -901,23 +442,6 @@ The rough cut stone floor of the foyer is marked with scratches and deep gouges,
 still liquid blood congeals underfoot. To the west is a small room that perhaps once housed a guard, and to the north you see some makeshift
 fortifications as if against some threat further inside. Back east lays the door to the main hall.
 
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ X __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Vault of the Once-Whole - Gaolers Quarters' : {
@@ -930,23 +454,6 @@ MAP:
 ============================================================================================================================================
 The small guardsman's room must have once been the quarters of a gaoler, with a heavyset barred door to the north. Discarded, rusted chains
 litter the floor and it looks as if something has broken out of them. Away from this, east leads back to the foyer.
-
-MAP:
-               □
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     X __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
             },
@@ -961,23 +468,6 @@ MAP:
 The walls surrounding the stockade are similarly slashed and gouged to the foyer to the south, and the congealing blood is spattered across 
 the thick planks that were once used to block something in. There is, however, a way forward to the west.
 
-MAP:
-               □
-               |
-     □ __ X    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'Vault of the Once-Whole - Gaol' : {
@@ -988,23 +478,6 @@ MAP:
 ============================================================================================================================================
 The gaol of an ancient soldier is littered with corpses of would-be adventurers that came before you, their skulls wrenched from their 
 shoulders and scattered amongst the broken chains and old weapons.
-
-MAP:
-               □
-               |
-     X __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
 
 ============================================================================================================================================''',
             },
@@ -1017,23 +490,6 @@ You are alone in a vast, echoic chamber. The air is still, and yet you feel the 
 room, there stands a lone door - a grand, imposing structure. There is no way to open it, but there seems to be a cavity inside - like a 
 mortise. Something surely fits in here.
 
-MAP:
-               □
-               |
-     □ __ □    X    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
             'The Atrium of Unmaking' : {
@@ -1043,30 +499,13 @@ MAP:
 ============================================================================================================================================
 The void that was visible beyond the cliffs and the clouds is here and threatens to consume you.
 
-MAP:
-               X
-               |
-     □ __ □    □    □ __ □
-     |    |    |    |    |
-     □ __ □ __ □ __ □ __ □
-               |   
-     □ __ □ __ □ __ □ __ □
-          |    |    |    |
-     □ __ □    □    □ __ □
-     |         |
-□    □ __ □ __ □ __ □
-|    |    |    |    |
-□ __ □    □ __ □ __ □   
-|    |
-□ __ □
-
 ============================================================================================================================================''',
             },
          }
-
+#HP remnant 2
 enemies = {
             'Feral Remnant' : {
-                  'enemyHP' : 2,
+                  'enemyHP' : 20,
                   'enemyATK'  : 3,
                 },
             'Whispering Mistborn' : {
@@ -1160,7 +599,7 @@ showInstructions()
 
 #loop forever
 while True:
-
+  playerATK = (playerSTR * weapondamage) + playerLCK
   showStatus()
 
   #get the player's next 'action'
@@ -1207,23 +646,62 @@ while True:
       playerSTR += 1
       inventory.remove('Elixir of Flesh')
     elif action[1] in weapons and action[1] in inventory:
-      
+      inventory.append(equipment[0])
+      equipment.clear()
       equipment.append(action[1])
       inventory.remove(action[1])
-      
-      
-     
+      weapondamage = weapons[action[1]]['weapondamage']
     else:
       print('Can\'t use ' + action[1] + '!')
       
+  #show map
+  if action[0] == 'map' :
+    print('''
+          
+MAP:
+               □
+               |
+     □ __ □    □    □ __ □             X = Start
+     |    |    |    |    |
+     □ __ □ __ □ __ □ __ □
+               |   
+     □ __ □ __ □ __ □ __ □
+          |    |    |    |
+     □ __ □    □    □ __ □
+     |         |
+X    □ __ □ __ □ __ □
+|    |    |    |    |
+□ __ □    □ __ □ __ □   
+|    |
+□ __ □
+          
+          '''
+)
 
 
-  #if they type 'attack' first
+  #if they type 'attack'
   if action[0] == 'attack' :
     if "enemy" in rooms[currentRoom] and action[1] in rooms[currentRoom]['enemy']:
-    #   startCombat()
-      print(action[1] + ' defeated!')
-      del rooms[currentRoom]['enemy']
+      print(action[1] + ' has '+ str(enemies[action[1]]['enemyHP']) +' HP and ' + str(enemies[action[1]]['enemyATK']) + ' attack.')
+      if enemies[action[1]]['enemyHP'] <= playerATK:
+       print(action[1] + ' defeated!')
+       playerHP -= enemies[action[1]]['enemyATK']
+       print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+       if playerHP <= 0:
+        print("YOU DIED.")
+        break
+       del rooms[currentRoom]['enemy']
+      elif enemies[action[1]]['enemyHP'] > playerATK:
+        enemies[action[1]]['enemyHP'] -= playerATK
+        print(action[1] + ' health decreased by ' + str(playerATK))
+        playerHP -= enemies[action[1]]['enemyATK']
+        print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+        if playerHP <= 0:
+         print("YOU DIED.")
+         break
+      elif playerHP <= 0:
+        print("YOU DIED.") 
+        break
     else:
       print('Can\'t do ' + action[1] + '!')
       
