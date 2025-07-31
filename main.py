@@ -175,7 +175,7 @@ east.
             'Wrought Iron Fence' : {
                   'west' : 'Cliff Ledge',
                   'south' : 'Graveyard',
-                  'east'  : 'Garden',
+                  'east'  : 'The Garden',
                   'desc'  : '''
 ============================================================================================================================================
 From your position atop the wrought iron fence, to the east you spy what seems to be a derelict yet once loved garden, with a dried fountain, 
@@ -196,7 +196,7 @@ and shields littered around them in tribute. The iron fence is to your north, an
 
 ============================================================================================================================================''',
             },
-            'Garden' : {
+            'The Garden' : {
                   'west' : 'Wrought Iron Fence',
                   'north' : 'Main Foyer',
                   'south' : 'Disused Training Yard',
@@ -553,23 +553,23 @@ enemies = {
 bosses = {
             'The Maw of Gentle Regret' : {
                   'enemyHP' : 15,
-                  'enemyATK'  : 4,
-                },
-            'Lady Vestige, the Bound Echo' : {
-                  'enemyHP' : 4,
                   'enemyATK'  : 2,
                 },
-            'The Choir of One' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 4,
-                },
-            'Ser Ulthric, Burdened of Names' : {
-                  'enemyHP' : 5,
+            'Lady Vestige, the Bound Echo' : {
+                  'enemyHP' : 20,
                   'enemyATK'  : 3,
                 },
+            'The Choir of One' : {
+                  'enemyHP' : 35,
+                  'enemyATK'  : 5,
+                },
+            'Ser Ulthric, Burdened of Names' : {
+                  'enemyHP' : 35,
+                  'enemyATK'  : 5,
+                },
             'The Child Beyond Time' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 4,
+                  'enemyHP' : 20,
+                  'enemyATK'  : 6,
                 },
 }
 
@@ -592,7 +592,7 @@ weapons = {
 }
 
 
-#spawn area
+#spawn area; change to wherever you need to go for debugging :)))
 currentRoom = 'Cave Cell'
 
 showInstructions()
@@ -702,15 +702,36 @@ X    □ __ □ __ □ __ □
       elif playerHP <= 0:
         print("YOU DIED.") 
         break
+    elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
+      print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
+      if bosses[action[1]]['enemyHP'] <= playerATK:
+       print(action[1] + ' defeated!')
+       playerHP -= bosses[action[1]]['enemyATK']
+       print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+       if playerHP <= 0:
+        print("YOU DIED.")
+        break
+       del rooms[currentRoom]['boss']
+      elif bosses[action[1]]['enemyHP'] > playerATK:
+        bosses[action[1]]['enemyHP'] -= playerATK
+        print(action[1] + ' health decreased by ' + str(playerATK))
+        playerHP -= bosses[action[1]]['enemyATK']
+        print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+        if playerHP <= 0:
+         print("YOU DIED.")
+         break
+      elif playerHP <= 0:
+        print("YOU DIED.") 
+        break
     else:
       print('Can\'t do ' + action[1] + '!')
       
-  ## Define how a player can win
-  if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
-    print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
-    break
+  # ## Define how a player can win
+  # if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
+  #   print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
+  #   break
 
-  ## If a player enters a room with a monster
-  elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
-    print('A monster has got you... GAME OVER!')
-    break
+  # ## If a player enters a room with a monster
+  # elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
+  # #   print('A monster has got you... GAME OVER!')
+  #   break
