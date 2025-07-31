@@ -1208,6 +1208,9 @@ while True:
       inventory.remove('Elixir of Flesh')
     elif action[1] in weapons and action[1] in inventory:
       
+      equipment.append(action[1])
+      inventory.remove(action[1])
+      
       
      
     else:
