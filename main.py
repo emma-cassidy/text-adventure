@@ -46,6 +46,7 @@ Select your starting character:
 
 char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
 playerATK = (playerSTR * weapondamage) + playerLCK
+maxHP = playerHP
 
 def showInstructions():
   print(f'''
@@ -64,7 +65,7 @@ def showStatus():
   print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
   print('You are in the ' + currentRoom)
   #show current stats
-  print(f'You have {playerHP} HP, {playerSTR} strength, and {playerLCK} luck.')
+  print(f'You have {playerHP} HP of a maximum {maxHP}, {playerSTR} strength, and {playerLCK} luck.')
   print(f'Your attack stat is {playerATK}.')
   #show the current inventory
   print('Inventory : ' + str(inventory))
@@ -86,6 +87,7 @@ def showStatus():
 
 
 inventory = []
+equipment = []
 
 rooms = {
 
@@ -262,6 +264,7 @@ MAP:
                   'south' : 'Cliff Ledge',
                   'east'  : 'The Maw Between Hours - Corridor',
                   'enemy' : 'Half-Born Remnant',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 From your location in the crevice of the thick stone wall, you notice what seems to be a grand corridor to your east. The air is pungent 
@@ -319,6 +322,7 @@ MAP:
                   'north' : 'Wrought Iron Fence',
                   'east'  : 'Disused Training Yard',
                   'enemy' : 'Whispering Mistborn',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 The graveyard is full of tombstones of varying shapes and sizes, with some modern black marble and others crumbling sandstone and lime. They
@@ -382,6 +386,7 @@ MAP:
                   'north' : 'The Garden',
                   'east'  : 'Worn Barracks',
                   'enemy' : 'Fallen Adventurer',
+                  'item'  : 'Rusted Axe',
                   'desc'  : '''
 ============================================================================================================================================
 Rotten straw men lay strewn across the ground, clearly having been target practice in the past, surrounded by an assortment of old weapons.
@@ -409,6 +414,7 @@ MAP:
             'Carriage House' : {
                   'west' : 'The Garden',
                   'south' : 'Worn Barracks',
+                  'item'  : 'Elixir of Soul',
                   'desc'  : '''
 ============================================================================================================================================
 The carriage house must have been a grand affair once, its simple design disguising the use of elegant woods in its construction. Rusted
@@ -438,6 +444,7 @@ MAP:
                   'west' : 'Disused Training Yard',
                   'north' : 'Carriage House',
                   'enemy' : 'Feral Remnant',
+                  'item'  : 'Steel Greatsword',
                   'desc'  : '''
 ============================================================================================================================================
 You step through the splinters that were once a door into a musty old barracks. Its a relatively small affair, with space and lodgings for
@@ -526,6 +533,7 @@ MAP:
                   'west' : 'Crack in the wall',
                   'north' : 'The Maw Between Hours - Foyer',
                   'enemy' : 'Half-Born Remnant',
+                  'item'  : 'Elixir of Soul',
                   'desc'  : '''
 ============================================================================================================================================
 The thick miasma of stench tainted by decay almost overwhelms you, but the gentle breeze through the crack in the west wall aids in your
@@ -613,6 +621,7 @@ MAP:
                   'south' : 'The Cradle That Remembers - Corridor',
                   'east'  : 'The Cradle That Remembers - Antechamber',
                   'enemy' : 'Husk of Knowing',
+                  'item'  : 'Heavy Mace',
                   'desc'  : '''
 ============================================================================================================================================
 This foyer has a lilting sadness somehow upon it. Lost books litter the floor, as if discarded in a hurry by someone searching for answers 
@@ -643,6 +652,7 @@ MAP:
                   'east'  : 'The Cradle That Remembers - Cradle',
                   'enemy' : 'Husk of Knowing',
                   'enemy' : 'Vessel of Errant Insight',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 Various faded artworks detail the walls, masking some of the faded silken wallpaper. There are indecipherable scrawls along the walls at
@@ -673,6 +683,7 @@ MAP:
                   'south' : 'The Cradle That Remembers - Cradle',
                   'enemy' : 'Husk of Knowing',
                   'enemy' : 'Vessel of Errant Insight',
+                  'item'  : 'Elixir of Soul',
                   'desc'  : '''
 ============================================================================================================================================
 Old and overused furniture is strewn around the antechamber as if someone had been living here for a very long time. Stacks upon stacks of
@@ -792,6 +803,7 @@ MAP:
                   'east'  : 'Sepulchre of the Unmarked Step - Undercroft',
                   'enemy' : 'Votary of Many Tongues',
                   'enemy' : 'Lamenting Vestal',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 Other than what appears to be an empty stone casket laying on a flagstone floor, there is nothing of note in this dusty room. The foyer is
@@ -821,6 +833,7 @@ MAP:
                   'north'  : 'Sepulchre of the Unmarked Step - Undercroft',
                   'enemy' : 'Votary of Many Tongues',
                   'enemy' : 'Lamenting Vestal',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 What appeared to simply be a workstation seems to actually be a preparation station for... bodies. A large marble slab sits pride of place
@@ -881,6 +894,7 @@ MAP:
                   'north' : 'Vault of the Once-Whole - Stockade',
                   'east'  : 'Hall of the Unnumbered Trials - North',
                   'enemy' : 'Chained Forlorn',
+                  'item'  : 'Steel Warhammer',
                   'desc'  : '''
 ============================================================================================================================================
 The rough cut stone floor of the foyer is marked with scratches and deep gouges, as if a battle had taken place here long before. Stale yet
@@ -911,6 +925,7 @@ MAP:
                   'north' : 'Vault of the Once-Whole - Gaol',
                   'enemy' : 'Chained Forlorn',
                   'enemy' : 'Blood-Fettered Veteran',
+                  'item'  : 'Elixir of Flesh',
                   'desc'  : '''
 ============================================================================================================================================
 The small guardsman's room must have once been the quarters of a gaoler, with a heavyset barred door to the north. Discarded, rusted chains
@@ -940,6 +955,7 @@ MAP:
                   'south' : 'Vault of the Once-Whole - Foyer',
                   'enemy' : 'Chained Forlorn',
                   'enemy' : 'Blood-Fettered Veteran',
+                  'item'  : 'Elixir of Soul',
                   'desc'  : '''
 ============================================================================================================================================
 The walls surrounding the stockade are similarly slashed and gouged to the foyer to the south, and the congealing blood is spattered across 
@@ -1157,7 +1173,7 @@ while True:
 
   # split allows an items to have a space on them
   # get golden key is returned ["get", "golden key"]          
-  action = action.lower().split(" ", 1)
+  action = action.split(" ", 1)
 
   #if they type 'go' first
   if action[0] == 'go':
@@ -1177,6 +1193,27 @@ while True:
       del rooms[currentRoom]['item']
     else:
       print('Can\'t get ' + action[1] + '!')
+
+
+  #to use an item
+  if action[0] == 'use' :
+    if "item" in rooms[currentRoom] and action[1] in rooms[currentRoom]['item']:
+      print(action[1] + ' must be picked up first!')
+    elif action[1] in inventory and action[1] == 'Elixir of Soul':
+      maxHP += 2
+      playerHP = maxHP
+      inventory.remove('Elixir of Soul')
+    elif action[1] in inventory and action[1] == 'Elixir of Flesh':
+      playerSTR += 1
+      inventory.remove('Elixir of Flesh')
+    elif action[1] in weapons and action[1] in inventory:
+      
+      
+     
+    else:
+      print('Can\'t use ' + action[1] + '!')
+      
+
 
   #if they type 'attack' first
   if action[0] == 'attack' :
