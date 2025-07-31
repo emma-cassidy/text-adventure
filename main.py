@@ -352,8 +352,11 @@ MAP:
                   'enemy' : 'Whispering Mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+You stand in the remains of a once-loved garden, evidenced by the dried earth of the former flower beds that garnished the mossy cobble path and
+surround the bases of the corpses of trees. West is the iron fence, south is an old training yard, and east appears to be a derelict carriage
+house. Directly north is a grand entryway into what appears to be some kind of manor or castle. The arched ironwood door is an anomaly among 
+the blatant disrepair, standing tall and imposing, as sound and polished as the day it was made. The carvings of the tympanum above are
+unintelligble, however.
 
 MAP:
                □
@@ -381,8 +384,8 @@ MAP:
                   'enemy' : 'Fallen Adventurer',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+Rotten straw men lay strewn across the ground, clearly having been target practice in the past, surrounded by an assortment of old weapons.
+To the west lays the graveyard, and to the east, an old barracks building. North is the garden.
 
 MAP:
                □
@@ -408,8 +411,9 @@ MAP:
                   'south' : 'Worn Barracks',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The carriage house must have been a grand affair once, its simple design disguising the use of elegant woods in its construction. Rusted
+troughs lay to one side where horses must have been fed and watered by their coachmen. There are no signs of any vehicle or animal now save
+for a bent old wheel to one side in the dusty building. Looking out west, you see the garden and to the south, a similarly dusty barracks.
 
 MAP:
                □
@@ -436,8 +440,9 @@ MAP:
                   'enemy' : 'Feral Remnant',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+You step through the splinters that were once a door into a musty old barracks. Its a relatively small affair, with space and lodgings for
+no more than ten guards. There are still a few mouldy hay mattresses dotted around, and an assortment of old weaponry. West lays the training
+yard, and to the north is the carriage house.
 
 MAP:
                □
@@ -464,8 +469,8 @@ MAP:
                   'enemy' : 'Whispering Mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The foyer seems out of place compared to outside - barring a little dust, it looks relatively modern, with ornate wainscoting in a lush dark
+wood with lighter appliques surrounding the doorway to the garden in the south and a similar doorway to the north. 
 
 MAP:
                □
@@ -493,8 +498,8 @@ MAP:
                   'east'  : 'The Cradle That Remembers - Foyer',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The wainscoting of the main foyer continues in to a grand hall, so large you are unable to see the northern end. Along the walls above the
+wooden pannelling 
 
 MAP:
                □
