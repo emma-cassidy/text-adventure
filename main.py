@@ -498,8 +498,10 @@ MAP:
                   'east'  : 'The Cradle That Remembers - Foyer',
                   'desc'  : '''
 ============================================================================================================================================
-The wainscoting of the main foyer continues in to a grand hall, so large you are unable to see the northern end. Along the walls above the
-wooden pannelling 
+The wainscoting of the main foyer continues in to a grand hall, so large you are almost unable to see the northern end. Along the walls above the
+wooden pannelling are stonecarved reliefs of figures, each wearing distinct attire and armour - as if in rememberance of previous heroes to tread
+the same path you are on. There is an empty space, waiting for its next inhabitant. There are two doors, one to the west and one to the east.
+To the north, there seem to be two more, similarly on each side.
 
 MAP:
                □
@@ -526,8 +528,8 @@ MAP:
                   'enemy' : 'Half-Born Remnant',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The thick miasma of stench tainted by decay almost overwhelms you, but the gentle breeze through the crack in the west wall aids in your
+resolve. The otherwise fine hallway leads north to the foyer.
 
 MAP:
                □
@@ -555,8 +557,9 @@ MAP:
                   'enemy' : 'Grasp of Many',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The repugnant stench of decay and despair becomes suffocating as you near its source. To the east, you see the door back to the vast hall of
+other doors, and to your south, the corridor with a crack in the wall to the outside. West lays a grand hall, where the source of the
+miasma appears to be.
 
 MAP:
                □
@@ -582,8 +585,9 @@ MAP:
                   'boss' : 'The Maw of Gentle Regret',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The hall must once have been a grand dining room, the polished marbled floor thick with a sludge that has the taint of rotten flesh and
+blood. The furniture, what is left of it, has all been swept to one side and there are distinct long bones of discarded limbs scattered
+amongst the filth.
 
 MAP:
                □
@@ -611,8 +615,9 @@ MAP:
                   'enemy' : 'Husk of Knowing',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+This foyer has a lilting sadness somehow upon it. Lost books litter the floor, as if discarded in a hurry by someone searching for answers 
+of the utmost import. To the south is a corridor, and to the east, an antechamber of some kind. To the west lays the long hallway of doors
+and forgotten faces.
 
 MAP:
                □
@@ -640,8 +645,9 @@ MAP:
                   'enemy' : 'Vessel of Errant Insight',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+Various faded artworks detail the walls, masking some of the faded silken wallpaper. There are indecipherable scrawls along the walls at
+intervals that appear to have been written at different times from the shades of the ink, yet strangely all with the same hand. To the east 
+the hall opens into a grand library, and to the north the foyer that leads back to the hall.
 
 MAP:
                □
@@ -669,8 +675,9 @@ MAP:
                   'enemy' : 'Vessel of Errant Insight',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+Old and overused furniture is strewn around the antechamber as if someone had been living here for a very long time. Stacks upon stacks of
+books surround the various seats like someone had worn out each in turn whilst searching for answers. To the south lays a grand library, and
+to the west, the foyer that leads back to the main hall.
 
 MAP:
                □
@@ -697,8 +704,9 @@ MAP:
                   'boss' : 'Lady Vestige, the Bound Echo',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The library houses thousands, if not more, books that once lurked on their many shelves. Cobwebs and filth cover most of the room, save for
+a corner where there had recently been activity. A solitary desk stands alone, covered in reams of parchment decorated in the same archaic
+script that adorns the walls of the corridor to the west. To the north lays the antechamber where someone had clearly been residing.
 
 MAP:
                □
@@ -726,8 +734,10 @@ MAP:
                   'east'  : 'Sepulchre of the Unmarked Step - Foyer',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The north end of the grand hall is as painstakingly decorated as its southern counterpart. The carved reliefs of heroes past continue to
+adorn the walls above the familiar dark wainscoting - is that a hint of sadness you see on the faces? There are two doors, one to the west 
+and one to the east. Back south, you can vaguely make out the same in the darkness.
+
 
 MAP:
                □
@@ -755,8 +765,8 @@ MAP:
                   'enemy' : 'Votary of Many Tongues',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+This foyer has an uncanny stillness about it - the stillness of the dead. To the north lies a suspciously empty room, and to the east, a room
+with some form of workstation. The west holds the door returning to the hall.
 
 MAP:
                □
@@ -784,8 +794,8 @@ MAP:
                   'enemy' : 'Lamenting Vestal',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+Other than what appears to be an empty stone casket laying on a flagstone floor, there is nothing of note in this dusty room. The foyer is
+back to the south, and to the east you can make of the distinctive vaulted appearance of an undercroft.
 
 MAP:
                □
@@ -813,8 +823,10 @@ MAP:
                   'enemy' : 'Lamenting Vestal',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+What appeared to simply be a workstation seems to actually be a preparation station for... bodies. A large marble slab sits pride of place
+in the centre and is covered with blackened red stains. To one side there are shelves, with various dusty containers, and fine tools perhaps
+for stripping flesh from bone. There is a painting on the slab, eerily similar to the faces in the reliefs of the grand hallway, almost as 
+if to be used as a reference. To the north lays the vaulted arches of an undercroft, and to the west the foyer back to the main hall.
 
 MAP:
                □
@@ -841,8 +853,9 @@ MAP:
                   'boss' : 'The Choir of One',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+You stand in the middle of a grand, vaulted room that houses sacks of materials in the corners. They spill out, seeming to be a cement of
+some description. Alongside them, there are a couple of skeletons in old ragged armour whose faces have been perfectly preserved as if alive
+yet smothered in plaster.
 
 MAP:
                □
@@ -870,8 +883,9 @@ MAP:
                   'enemy' : 'Chained Forlorn',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The rough cut stone floor of the foyer is marked with scratches and deep gouges, as if a battle had taken place here long before. Stale yet
+still liquid blood congeals underfoot. To the west is a small room that perhaps once housed a guard, and to the north you see some makeshift
+fortifications as if against some threat further inside. Back east lays the door to the main hall.
 
 MAP:
                □
@@ -899,8 +913,8 @@ MAP:
                   'enemy' : 'Blood-Fettered Veteran',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The small guardsman's room must have once been the quarters of a gaoler, with a heavyset barred door to the north. Discarded, rusted chains
+litter the floor and it looks as if something has broken out of them. Away from this, east leads back to the foyer.
 
 MAP:
                □
@@ -928,8 +942,8 @@ MAP:
                   'enemy' : 'Blood-Fettered Veteran',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The walls surrounding the stockade are similarly slashed and gouged to the foyer to the south, and the congealing blood is spattered across 
+the thick planks that were once used to block something in. There is, however, a way forward to the west.
 
 MAP:
                □
@@ -956,8 +970,8 @@ MAP:
                   'boss' : 'Ser Ulthric, Burdened of Names',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The gaol of an ancient soldier is littered with corpses of would-be adventurers that came before you, their skulls wrenched from their 
+shoulders and scattered amongst the broken chains and old weapons.
 
 MAP:
                □
@@ -1011,8 +1025,7 @@ MAP:
                   'boss' : 'The Child Beyond Time',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The void that was visible beyond the cliffs and the clouds is here and threatens to consume you.
 
 MAP:
                X
@@ -1109,37 +1122,17 @@ weapons = {
             'Broken Sword' : {
                   'weapondamage' : 2,
                 },
-            'Whispering Mistborn' : {
-                  'weapondamage' : 4,
-                  'enemyATK'  : 2,
-                },
-            'Fallen Adventurer' : {
-                  'weapondamage' : 5,
-                  'enemyATK'  : 4,
-                },
-            'Chained Forlorn' : {
-                  'weapondamage' : 5,
-                  'enemyATK'  : 3,
-                },
-            'Blood-Fettered Veteran' : {
-                  'weapondamage' : 4,
-                  'enemyATK'  : 6,
-                },
-            'Lamenting Vestal' : {
+            'Rusted Axe' : {
                   'weapondamage' : 3,
-                  'enemyATK'  : 5,
                 },
-            'Acolyte of Many Tongues' : {
+            'Steel Greatsword' : {
+                  'weapondamage' : 4,
+                },
+            'Heavy Mace' : {
                   'weapondamage' : 5,
-                  'enemyATK'  : 3,
                 },
-            'Grasp of Many' : {
-                  'weapondamage' : 8,
-                  'enemyATK'  : 2,
-                },
-            'Half-Born Remnant' : {
-                  'weapondamage' : 2,
-                  'enemyATK'  : 3,
+            'Steel Warhammer' : {
+                  'weapondamage' : 6,
                 },
 }
 
@@ -1155,7 +1148,7 @@ while True:
   showStatus()
 
   #get the player's next 'action'
-  #.split() breaks it up into an list array
+  #.split() breaks it up into a list array
   #eg typing 'go east' would give the list:
   #['go','east']
   action = ''
