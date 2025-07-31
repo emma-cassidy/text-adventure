@@ -150,8 +150,9 @@ X __ □    □ __ □ __ □
                   'enemy' : 'Feral Remnant',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The cave mouth faces out onto a sheer cliff opening. You see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
+In the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
+elsewhere. To your north is the cave tunnel.
 
 MAP:
                □
@@ -179,8 +180,10 @@ X __ □
                   'enemy' : 'Feral Remnant',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The cave mouth faces out onto a sheer cliff opening. You see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
+In the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
+elsewhere. To your west is the cave tunnel. To your south is the cliff edge, where you can hear a faint moaning. To your north, there seems
+to be a ledge you could climb.
 
 MAP:
                □
@@ -206,8 +209,7 @@ MAP:
                   'enemy' : 'Whispering Mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+You stand on the precipice, staring out into the silent darkness. There is no other way forward except back north to the cave mouth.
 
 MAP:
                □
@@ -234,8 +236,8 @@ MAP:
                   'east'  : 'Wrought Iron Fence',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+You scramble onto the ledge, and to your east notice a wrought iron fence you could climb. To your north, there is a crack in a large stone
+wall, large enough for you to squeeze into. To your south below you lies the cave mouth.
 
 MAP:
                □
@@ -262,8 +264,9 @@ MAP:
                   'enemy' : 'Half-Born Remnant',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+From your location in the crevice of the thick stone wall, you notice what seems to be a grand corridor to your east. The air is pungent 
+with rot and decay, punctured only by the fresh air flowing from the cliff ledge to your south. You hear movement in the building to your
+east. 
 
 MAP:
                □
@@ -290,8 +293,8 @@ MAP:
                   'east'  : 'Garden',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+From your position atop the wrought iron fence, to the east you spy what seems to be a derelict yet once loved garden, with a dried fountain, 
+barren soil and withered trees. To your south there are unmistakeably graves whose inhabitants' names have been lost to time.
 
 MAP:
                □
@@ -318,8 +321,9 @@ MAP:
                   'enemy' : 'Whispering Mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+The graveyard is full of tombstones of varying shapes and sizes, with some modern black marble and others crumbling sandstone and lime. They
+have one thing in common - all have clearly been forgotten - but appear to be those of heroes, judging from the decayed and rusted weapons
+and shields littered around them in tribute. The iron fence is to your north, and to your east you see a disused training yard.
 
 MAP:
                □
