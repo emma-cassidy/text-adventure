@@ -669,16 +669,10 @@ while True:
   playerATK = (playerSTR * weapondamage) + playerLCK
   showStatus()
 
-  #get the player's next 'action'
-  #.split() breaks it up into a list array
-  #eg typing 'go east' would give the list:
-  #['go','east']
+  #get the player's next 'action' as a list array (verb, noun)
   action = ''
   while action == '':
-    action = input('>')
-
-  # split allows an items to have a space on them
-  # get golden key is returned ["get", "golden key"]          
+    action = input('>')       
   action = action.split(" ", 1)
 
   #if they type 'go' first
