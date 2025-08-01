@@ -50,7 +50,7 @@ Select your starting character:
 
 
 char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
-placeholder = "testwa"
+placeholder = "test"
 maxHP = playerHP
 
 def showInstructions():
