@@ -23,7 +23,7 @@ Select your starting character:
 ''')
   while True:
     char_class = input("Choose your class. Enter Cleric, Warrior or Rogue: ").lower()
-    if char_class in ["cleric", "warrior", "rogue"]:
+    if char_class in ["cleric", "warrior", "rogue", "dovahkiin",]:
         break
     else:
         print("Please choose a valid class.")
@@ -37,15 +37,20 @@ Select your starting character:
     playerHP = 5
     playerSTR = 5
     playerLCK = 0
-  else:
+  elif char_class == "rogue":
     playerHP = 5
     playerSTR = 2
     playerLCK = 5
+  else:
+    playerHP = 50
+    playerSTR = 15
+    playerLCK = 10
+  
   return char_name, char_class, playerHP, playerSTR, playerLCK
 
 
 char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
-placeholder = ""
+placeholder = "testwa"
 maxHP = playerHP
 
 def showInstructions():
@@ -83,8 +88,8 @@ def showStatus():
     if "boss" in rooms[currentRoom]:
         print('The boss ' + rooms[currentRoom]['boss'] + ' prepares to attack!')
         placeholder = rooms[currentRoom]['boss']
-    if "boss" in rooms[currentRoom] and bosses[placeholder]['enemyHP'] > 20:
-        print((bosses[placeholder]['bossdesc']))
+        if bosses[placeholder]['enemyHP'] >= 30:
+            print((bosses[placeholder]['bossdesc']))
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
@@ -553,7 +558,7 @@ enemies = {
 
 bosses = {
             'The Maw of Gentle Regret' : {
-                  'enemyHP' : 21,
+                  'enemyHP' : 30,
                   'enemyATK'  : 2,
                   'bosskey'  : 'Tenon of Many Ends',
                   'bossdesc' : '''
@@ -565,7 +570,7 @@ All who enter are remembered. None as themselves. Purpose decays. But hunger per
                   'bosskeydesc' : 'Knotted bone and glimmering ash. It does not fit cleanly into any shape- but somehow, it belongs.',
                 },
             'Lady Vestige, the Bound Echo' : {
-                  'enemyHP' : 20,
+                  'enemyHP' : 30,
                   'enemyATK'  : 3,
                   'bosskey'  : 'Tenon of Unspoken Shapes',
                   'bossdesc' : '''
@@ -601,7 +606,7 @@ Chains may break. But the burden remains. He remembers only the oath. Not who he
                   'bosskeydesc' : 'A heavy shard of forged steel, stained and splintered. It bears the weight of forgotten vows.',
                 },
             'The Child Beyond Time' : {
-                  'enemyHP' : 40,
+                  'enemyHP' : 50,
                   'enemyATK'  : 6,
                   'bossdesc'  :'''
 The lock turns not with a key, but with surrender. You are not the first. You were simply next.
@@ -655,8 +660,8 @@ finalbosstext = {
             3 : '''“We’ve done this before. We’ll do it again. One of us must be free.”''',
 }
 #spawn area is cave cell; change to wherever you need to go for debugging :)))
-currentRoom = 'The Maw Between Hours - Foyer'
-
+currentRoom = 'The Silent Threshold'
+# currentRoom = "The Maw Between Hours - Foyer"
 showInstructions()
 
 #loop forever
@@ -764,7 +769,7 @@ X    □ __ □ __ □ __ □
       elif playerHP <= 0:
           print("YOU DIED.") 
           break
-      elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
+      elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss'] and rooms[currentRoom]['boss'] != "The Child Beyond Time":
           print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
           if bosses[action[1]]['enemyHP'] <= playerATK:
               print(action[1] + ' defeated!')
@@ -781,24 +786,17 @@ X    □ __ □ __ □ __ □
                   print("YOU DIED.")
                   break
               del rooms[currentRoom]['boss']
-          elif bosses[action[1]]['enemyHP'] > playerATK:
-              bosses[action[1]]['enemyHP'] -= playerATK
-              print(action[1] + ' health decreased by ' + str(playerATK))
-              playerHP -= bosses[action[1]]['enemyATK']
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-              if playerHP <= 0:
-                  print("YOU DIED.")
-                  break
-      elif "boss" in rooms[currentRoom] == "The Child Beyond Time":
+
+      elif rooms[currentRoom]["boss"] == "The Child Beyond Time":
           print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
           if finalbossturn == 1:
-             print(finalbosstext[1])
+            print(finalbosstext[1])
           if finalbossturn == 2:
-             print(finalbosstext[2])
+            print(finalbosstext[2])
           if finalbossturn == 3:
-             print(finalbosstext[3])
+            print(finalbosstext[3])
           if finalbossturn >= 4:
-             print("")
+            print("")
           if bosses[action[1]]['enemyHP'] <= playerATK:
               print(action[1] + ''' has been defeated... for now.
 A voice whispers in the darkness:
@@ -809,7 +807,6 @@ A voice whispers in the darkness:
                     
 “Soon... you’ll forget this was you.”
                     ''')
-              del rooms[currentRoom]['boss']
               playerHP -= bosses[action[1]]['enemyATK']
               print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
               if playerHP <= 0:
@@ -825,30 +822,26 @@ A voice whispers in the darkness:
               if playerHP <= 0:
                   print("YOU DIED.")
                   break
+          elif bosses[action[1]]['enemyHP'] > playerATK:
+              bosses[action[1]]['enemyHP'] -= playerATK
+              print(action[1] + ' health decreased by ' + str(playerATK))
+              playerHP -= bosses[action[1]]['enemyATK']
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
+
       else:
         print('Can\'t do ' + action[1] + '!')
 
+  ## Define how a player can win
+  if currentRoom == 'The Silent Threshold' and 'Tenon of Many Ends' in inventory and 'Tenon of Unspoken Shapes' in inventory and 'Tenon of Hollow Praise' in inventory and 'Tenon of Broken Oaths' in inventory:
+    print('''
+  ============================================================================================================================================
+The tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
+the mortise. The door opens slowly without a sound, and your breath catches in your throat as you step through.
+============================================================================================================================================''')
+    currentRoom = 'The Atrium of Unmaking'
+    showStatus()
 
-  
-  #   #gain items to progress from the bosses
-  # if action[0] == 'attack' :
-  #   if "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
-  #     if bosses[action[1]]['enemyHP'] == 0:
-  #       inventory.append(bosses[action[1]]['bosskey'])
-  #       print(bosses[action[1]]['bosskeydesc'])
 
-
-      
-  # ## Define how a player can win
-  # if currentRoom == 'The Silent Threshold' and 'key' in inventory and 'potion' in inventory:
-  #   print('''
-  # ============================================================================================================================================
-# The tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
-# the mortise. The door opens slowly without a sound, and your breath catches in your throat as you tep through.
-# ============================================================================================================================================'''
-#   #   break
-
-#   # ## If a player enters a room with a monster
-#   # elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
-#   # #   print('A monster has got you... GAME OVER!')
-#   #   break
