@@ -660,8 +660,8 @@ finalbosstext = {
             3 : '''“We’ve done this before. We’ll do it again. One of us must be free.”''',
 }
 #spawn area is cave cell; change to wherever you need to go for debugging :)))
-currentRoom = 'The Silent Threshold'
-# currentRoom = "The Maw Between Hours - Foyer"
+currentRoom = 'Cave Cell'
+
 showInstructions()
 
 #loop forever
