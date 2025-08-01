@@ -7,7 +7,7 @@ playerATK = 0
 char_name = ""
 char_class = ""
 weapondamage = 1
-
+finalbossturn = 1
 
 def characterSelect():
   print('''
@@ -45,7 +45,7 @@ Select your starting character:
 
 
 char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
-
+placeholder = ""
 maxHP = playerHP
 
 def showInstructions():
@@ -62,27 +62,30 @@ Commands:
 ''')
 
 def showStatus():
-  #print the player's current status
-  print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-  print('You are in the ' + currentRoom)
-  #show current stats
-  print(f'You have {playerHP} HP of a maximum {maxHP}, {playerSTR} strength, and {playerLCK} luck.')
-  print(f'Your attack stat is {playerATK}.')
-  #show the current inventory and equipment
-  print('Inventory : ' + str(inventory))
-  print('Equipment : ' + str(equipment))
-  #print description if there is one
-  if "desc" in rooms[currentRoom]:
-    print((rooms[currentRoom]['desc']))
-  #show an item if there is one
-  if "item" in rooms[currentRoom]:
-    print('You see a ' + rooms[currentRoom]['item'])
-  #show an enemy if there is one
-  if "enemy" in rooms[currentRoom]:
-    print('There is a ' + rooms[currentRoom]['enemy'] + ' enemy in here!')
-  if "boss" in rooms[currentRoom]:
-    print('The boss ' + rooms[currentRoom]['boss'] + ' prepares to attack!')
-  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    #print the player's current status
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    print('You are in the ' + currentRoom)
+    #show current stats
+    print(f'You have {playerHP} HP of a maximum {maxHP}, {playerSTR} strength, and {playerLCK} luck.')
+    print(f'Your attack stat is {playerATK}.')
+    #show the current inventory and equipment
+    print('Inventory : ' + str(inventory))
+    print('Equipment : ' + str(equipment))
+    #print description if there is one
+    if "desc" in rooms[currentRoom]:
+        print((rooms[currentRoom]['desc']))
+    #show an item if there is one
+    if "item" in rooms[currentRoom]:
+        print('You see a ' + rooms[currentRoom]['item'])
+    #show an enemy if there is one
+    if "enemy" in rooms[currentRoom]:
+        print('There is a ' + rooms[currentRoom]['enemy'] + ' enemy in here!')
+    if "boss" in rooms[currentRoom]:
+        print('The boss ' + rooms[currentRoom]['boss'] + ' prepares to attack!')
+        placeholder = rooms[currentRoom]['boss']
+    if "boss" in rooms[currentRoom] and bosses[placeholder]['enemyHP'] > 20:
+        print((bosses[placeholder]['bossdesc']))
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 inventory = []
@@ -496,7 +499,6 @@ mortise. Something surely fits in here.
                   'boss' : 'The Child Beyond Time',
                   'desc'  : '''
 ============================================================================================================================================
-The void that was visible beyond the cliffs and the clouds is here and threatens to consume you.
 
 ============================================================================================================================================''',
             },
@@ -551,33 +553,81 @@ enemies = {
 
 bosses = {
             'The Maw of Gentle Regret' : {
-                  'enemyHP' : 1,
+                  'enemyHP' : 21,
                   'enemyATK'  : 2,
                   'bosskey'  : 'Tenon of Many Ends',
-                  'bossdesc' : "",
+                  'bossdesc' : '''
+Stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
+It wears their armor, their limbs, their hopes - all rotting beneath the weight of shared failure.
+So many came seeking purpose. Together, they found something worse.
+
+All who enter are remembered. None as themselves. Purpose decays. But hunger persists.''',
                   'bosskeydesc' : 'Knotted bone and glimmering ash. It does not fit cleanly into any shape- but somehow, it belongs.',
                 },
             'Lady Vestige, the Bound Echo' : {
                   'enemyHP' : 20,
                   'enemyATK'  : 3,
                   'bosskey'  : 'Tenon of Unspoken Shapes',
+                  'bossdesc' : '''
+Once a seeker of escape through knowledge, she unmade herself word by word.
+Now bound in thought and thin as parchment, she whispers truths no mind should carry.
+She read until there was no more ‘she’ left to read.
+
+She sought the way out, and became the door. In knowing everything, she forgot what she was.''',
                   'bosskeydesc' : 'Carved with symbols that shift when not observed. Cold to the touch, yet burns with withheld meaning.',
                 },
             'The Choir of One' : {
                   'enemyHP' : 35,
                   'enemyATK'  : 5,
                   'bosskey'  : 'Tenon of Hollow Praise',
+                  'bossdesc' : '''
+A broken cleric who sang to silence until silence sang back.
+Now a choir of mouths and madness, it praises a god that answers only in echoes.
+There were no others to join the hymn. So, it made them.
+
+Sing loud enough, and the silence will sing back.''',
                   'bosskeydesc' : 'Pale and resonant, it hums faintly with voices not your own. Some still believe it is listening.',
                 },
             'Ser Ulthric, Burdened of Names' : {
                   'enemyHP' : 35,
                   'enemyATK'  : 5,
                   'bosskey'  : 'Tenon of Broken Oaths',
+                  'bossdesc' : '''
+Once a proud champion entombed by his own honours, Ulthric was left to rot in chains he forged with valour.
+Now, a beast of instinct, he swings in defiance of a past no longer his.
+They built walls to keep him safe. Or was it to keep him in?
+
+Chains may break. But the burden remains. He remembers only the oath. Not who he swore it to.''',
                   'bosskeydesc' : 'A heavy shard of forged steel, stained and splintered. It bears the weight of forgotten vows.',
                 },
             'The Child Beyond Time' : {
                   'enemyHP' : 40,
                   'enemyATK'  : 6,
+                  'bossdesc'  :'''
+The lock turns not with a key, but with surrender. You are not the first. You were simply next.
+
+You step forward into nothing- a formless, infinite void that swallows all sound, all light, all meaning.
+
+There is no floor, yet you do not fall.
+There are no walls, yet something watches.
+
+The air shimmers faintly with the echo of voices you don’t remember having,
+names you’ve almost spoken, and faces you’ve almost known.
+
+Far ahead, a figure stands- not tall, not grand, but small.
+A silhouette of something childlike, flickering between shapes like a stuttering memory.
+One moment draped in rags, the next in ruined armour, then nothing at all.
+It doesn’t look at you—but you know it knows you’re here.
+
+Fragments of past rooms briefly coalesce in the distance-
+a broken chain, a plaster face, a discarded helm, a singed page
+and are gone again.
+
+This is the place the maze was built to hide.
+
+This is where it ends.
+Or begins.
+'''
                 },
 }
 
@@ -599,7 +649,11 @@ weapons = {
                 },
 }
 
-
+finalbosstext = {
+            1 : '''"You have come far. Or rather, you have come again."''',
+            2 : '''"You were always meant to arrive. That is why they were chosen. Do you recognize them? No… you wouldn’t yet.”''',
+            3 : '''“We’ve done this before. We’ll do it again. One of us must be free.”''',
+}
 #spawn area is cave cell; change to wherever you need to go for debugging :)))
 currentRoom = 'The Maw Between Hours - Foyer'
 
@@ -735,9 +789,47 @@ X    □ __ □ __ □ __ □
               if playerHP <= 0:
                   print("YOU DIED.")
                   break
+      elif "boss" in rooms[currentRoom] == "The Child Beyond Time":
+          print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
+          if finalbossturn == 1:
+             print(finalbosstext[1])
+          if finalbossturn == 2:
+             print(finalbosstext[2])
+          if finalbossturn == 3:
+             print(finalbosstext[3])
+          if finalbossturn >= 4:
+             print("")
+          if bosses[action[1]]['enemyHP'] <= playerATK:
+              print(action[1] + ''' has been defeated... for now.
+A voice whispers in the darkness:
+                    
+“You’ll need new guards.”
+                    
+“Find others. From other whens. Make them strong.”
+                    
+“Soon... you’ll forget this was you.”
+                    ''')
+              del rooms[currentRoom]['boss']
+              playerHP -= bosses[action[1]]['enemyATK']
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
+              del rooms[currentRoom]['boss']
+          elif bosses[action[1]]['enemyHP'] > playerATK:
+              bosses[action[1]]['enemyHP'] -= playerATK
+              print(action[1] + ' health decreased by ' + str(playerATK))
+              playerHP -= bosses[action[1]]['enemyATK']
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+              finalbossturn += 1
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
       else:
         print('Can\'t do ' + action[1] + '!')
 
+
+  
   #   #gain items to progress from the bosses
   # if action[0] == 'attack' :
   #   if "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
