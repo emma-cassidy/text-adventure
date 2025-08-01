@@ -1,6 +1,8 @@
 #My baby RPG lol
 
 import random
+import ctypes
+ctypes.windll.kernel32.SetConsoleTitleW("EMMA RING")
 
 playerHP = 0
 playerSTR = 0
@@ -731,9 +733,11 @@ while True:
     elif action[1] in inventory and action[1] == 'Elixir of Soul':
       maxHP += 2
       playerHP = maxHP
+      print("You feel sturdier! Max HP increased.")
       inventory.remove('Elixir of Soul')
     elif action[1] in inventory and action[1] == 'Elixir of Flesh':
       playerSTR += 1
+      print("You feel stronger! Strength increased.")
       inventory.remove('Elixir of Flesh')
     elif action[1] in weapons and action[1] in inventory:
       inventory.append(equipment[0])
