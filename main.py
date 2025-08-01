@@ -1,5 +1,7 @@
 #My baby RPG lol
 
+import random
+
 playerHP = 0
 playerSTR = 0
 playerLCK = 0
@@ -11,7 +13,31 @@ finalbossturn = 1
 
 def characterSelect():
   print('''
-Welcome to EMMA RING
+                                                                                                                                                    
+                                 ████   █    ███                                                  ██████████                                                      
+                                  ███   ██   ██  █████ ██     ██████  █████    █      █  █████    █   ██   █  █████                                               
+                                   ██  ████  ██  ██    ██   ███    ███     ██  ██    ██   ██          ██    ██    ███                                             
+                                   █████ █████   █████ ██   ██      ██     ██  ███  ███   ████        ██    ██     ██                                             
+                                    ███   ███    ██    ██   ███     ██     ██ ██ ████ █   ██          ██    ██     ██                                             
+                                    ██    ███    █████ █████ ███████  ██████  ██  ██  ██ █████        ██      ██████                                              
+                                                                                                      ██                                                          
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
+        ██████████    ███           ██        ██            ██            ██               ██████████        ██████   ███         █████     █████████████         
+         ████   ██    ████         ███        ███          ███           ████               ████   ████       ████    █████        ███    ████        ██          
+         ████         █████       █████       ████        ████           █████              ████   ████       ████    ██████       ███   ███           █          
+         ████         ██████     ██████       █████      ██████         ██████              ████   ████       ████    ██ █████     ███  ████                      
+         █████████    ██ ████   ███ ███      ███ ███    ███ ███        ███  ███             ████  ███         ████    ███  █████   ███  ████        █████         
+         ████   ██   ███  ████  ██  ███      ███  ███  ███  ███        █████████            █████████         ████    ███    ████  ███  ████         ████         
+         ████        ███   ██████   ███      ███  ███████   ███       ███    ████           ████   ███        ████    ███      ███████   ████        ████         
+         ████     █  ███   ██████   ████     ██    █████    ███      ███      ████          ████    ████      ████    ███       ██████    ████       ████         
+         █████  ███  ███     ███    ████    ███     ███     ████    ████       ████         ████     █████    ████    ███         ████     ██████   █████         
+         █████████  █████            █████  ████             █████ █████       █████       ██████       ████  █████  █████          █          ███████            
+                                                                                                                                                                  
+                                                                        
 ============================================================================================================================================
 Select your starting character:
   Cleric - 8HP, 2 Strength, 2 Luck 
@@ -63,6 +89,9 @@ Commands:
   use [item]           (item name)
   map                  (shows map)
   attack [enemy]       (initiates combat)
+
+  Defeating enemies increases your maximum HP!
+  Defeating bosses increases your maximum Strength!
 ============================================================================================================================================
 ''')
 
@@ -740,31 +769,95 @@ X    □ __ □ __ □ __ □
 )
 
 
-  #if they type 'attack'
+  #attacking a normal enemy
   if action[0] == 'attack' :
       if "enemy" in rooms[currentRoom] and action[1] in rooms[currentRoom]['enemy']:
           print(action[1] + ' has '+ str(enemies[action[1]]['enemyHP']) +' HP and ' + str(enemies[action[1]]['enemyATK']) + ' attack.')
+          if playerLCK == 0:
+              hitchance = random.randint(0,3)
+              enemyhitchance = random.randint(0,4)
+          elif playerLCK == 2:
+              hitchance = random.randint(0,5)
+              enemyhitchance = random.randint(0,3)
+          elif playerLCK >= 5:
+              hitchance = random.randint(0,10)
+              enemyhitchance = random.randint(0,2)
+
           if enemies[action[1]]['enemyHP'] <= playerATK:
               print(action[1] + ' defeated!')
               del rooms[currentRoom]['enemy']
-              playerHP -= enemies[action[1]]['enemyATK']
-              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+              playerHP -= enemies[action[1]]['enemyATK'] 
+              playerHP -= enemyhitchance
+              maxHP += 1
+              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
           if playerHP <= 0:
-              print("YOU DIED.")
+              print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
               break
           elif enemies[action[1]]['enemyHP'] > playerATK:
               enemies[action[1]]['enemyHP'] -= playerATK
+              enemies[action[1]]['enemyHP'] -= hitchance
               print(action[1] + ' health decreased by ' + str(playerATK))
               playerHP -= enemies[action[1]]['enemyATK']
-              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+              playerHP -= enemyhitchance
+              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
               if playerHP <= 0:
-                  print("YOU DIED.")
+                  print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
                   break
       elif playerHP <= 0:
-          print("YOU DIED.") 
+          print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
           break
+      
+
+
+
+#attacking a boss that is not final boss
       elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss'] and rooms[currentRoom]['boss'] != "The Child Beyond Time":
           print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
+          if playerLCK == 0:
+              hitchance = random.randint(0,3)
+              enemyhitchance = random.randint(0,4)
+          elif playerLCK == 2:
+              hitchance = random.randint(0,5)
+              enemyhitchance = random.randint(0,3)
+          elif playerLCK >= 5:
+              hitchance = random.randint(0,10)
+              enemyhitchance = random.randint(0,2)
           if bosses[action[1]]['enemyHP'] <= playerATK:
               print(action[1] + ' defeated!')
               del rooms[currentRoom]['boss']
@@ -772,17 +865,64 @@ X    □ __ □ __ □ __ □
               print(bosses[action[1]]['bosskey'] + ' added to inventory!')
               print(bosses[action[1]]['bosskeydesc'])
               playerHP -= bosses[action[1]]['enemyATK']
+              playerHP -= enemyhitchance
+              playerSTR += 1
               print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
           if bosses[action[1]]['enemyHP'] == 0:
               inventory.append(bosses[action[1]]['bosskey'])
               print(bosses[action[1]]['bosskeydesc'])
               if playerHP <= 0:
-                  print("YOU DIED.")
+                  print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
                   break
               del rooms[currentRoom]['boss']
+          elif bosses[action[1]]['enemyHP'] > playerATK:
+              bosses[action[1]]['enemyHP'] -= playerATK
+              bosses[action[1]]['enemyHP'] -= hitchance
+              print(action[1] + ' health decreased by ' + str(playerATK))
+              playerHP -= bosses[action[1]]['enemyATK']
+              playerHP -= enemyhitchance
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
+              if playerHP <= 0:
+                  print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
+                  break
 
+
+#attacking final boss
       elif rooms[currentRoom]["boss"] == "The Child Beyond Time":
           print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
+          if playerLCK == 0:
+              hitchance = random.randint(0,3)
+              enemyhitchance = random.randint(0,4)
+          elif playerLCK == 2:
+              hitchance = random.randint(0,5)
+              enemyhitchance = random.randint(0,3)
+          elif playerLCK >= 5:
+              hitchance = random.randint(0,10)
+              enemyhitchance = random.randint(0,2)
           if finalbossturn == 1:
             print(finalbosstext[1])
           if finalbossturn == 2:
@@ -804,31 +944,50 @@ A voice whispers in the darkness:
               playerHP -= bosses[action[1]]['enemyATK']
               print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
               if playerHP <= 0:
-                  print("YOU DIED.")
+                  print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
                   break
               del rooms[currentRoom]['boss']
           elif bosses[action[1]]['enemyHP'] > playerATK:
               bosses[action[1]]['enemyHP'] -= playerATK
+              bosses[action[1]]['enemyHP'] -= hitchance
               print(action[1] + ' health decreased by ' + str(playerATK))
               playerHP -= bosses[action[1]]['enemyATK']
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+              playerHP -= enemyhitchance
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
               finalbossturn += 1
               if playerHP <= 0:
-                  print("YOU DIED.")
+                  print('''
+                        
+            ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+            ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+             ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+              ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+              ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+               ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+               ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+               ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                          █           █                                                             
+                                                                                                    
+                        ''')
                   break
-          elif bosses[action[1]]['enemyHP'] > playerATK:
-              bosses[action[1]]['enemyHP'] -= playerATK
-              print(action[1] + ' health decreased by ' + str(playerATK))
-              playerHP -= bosses[action[1]]['enemyATK']
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-              if playerHP <= 0:
-                  print("YOU DIED.")
-                  break
+
 
       else:
         print('Can\'t do ' + action[1] + '!')
 
-  ## Define how a player can win
+  #if a player has defeated all four bosses, going to the silent threshold with all the keys will send them into final boss room
   if currentRoom == 'The Silent Threshold' and 'Tenon of Many Ends' in inventory and 'Tenon of Unspoken Shapes' in inventory and 'Tenon of Hollow Praise' in inventory and 'Tenon of Broken Oaths' in inventory:
     print('''
   ============================================================================================================================================
