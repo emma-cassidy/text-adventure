@@ -482,7 +482,6 @@ shoulders and scattered amongst the broken chains and old weapons.
 ============================================================================================================================================''',
             },
             'The Silent Threshold' : {
-                  'north' : 'The Atrium of Unmaking',
                   'south' : 'Hall of the Unnumbered Trials - North',
                   'desc'  : '''
 ============================================================================================================================================
@@ -505,7 +504,7 @@ The void that was visible beyond the cliffs and the clouds is here and threatens
 #HP remnant 2
 enemies = {
             'Feral Remnant' : {
-                  'enemyHP' : 20,
+                  'enemyHP' : 2,
                   'enemyATK'  : 3,
                 },
             'Whispering Mistborn' : {
@@ -552,23 +551,32 @@ enemies = {
 
 bosses = {
             'The Maw of Gentle Regret' : {
-                  'enemyHP' : 15,
+                  'enemyHP' : 1,
                   'enemyATK'  : 2,
+                  'bosskey'  : 'Tenon of Many Ends',
+                  'bossdesc' : "",
+                  'bosskeydesc' : 'Knotted bone and glimmering ash. It does not fit cleanly into any shape- but somehow, it belongs.',
                 },
             'Lady Vestige, the Bound Echo' : {
                   'enemyHP' : 20,
                   'enemyATK'  : 3,
+                  'bosskey'  : 'Tenon of Unspoken Shapes',
+                  'bosskeydesc' : 'Carved with symbols that shift when not observed. Cold to the touch, yet burns with withheld meaning.',
                 },
             'The Choir of One' : {
                   'enemyHP' : 35,
                   'enemyATK'  : 5,
+                  'bosskey'  : 'Tenon of Hollow Praise',
+                  'bosskeydesc' : 'Pale and resonant, it hums faintly with voices not your own. Some still believe it is listening.',
                 },
             'Ser Ulthric, Burdened of Names' : {
                   'enemyHP' : 35,
                   'enemyATK'  : 5,
+                  'bosskey'  : 'Tenon of Broken Oaths',
+                  'bosskeydesc' : 'A heavy shard of forged steel, stained and splintered. It bears the weight of forgotten vows.',
                 },
             'The Child Beyond Time' : {
-                  'enemyHP' : 20,
+                  'enemyHP' : 40,
                   'enemyATK'  : 6,
                 },
 }
@@ -592,8 +600,8 @@ weapons = {
 }
 
 
-#spawn area; change to wherever you need to go for debugging :)))
-currentRoom = 'Cave Cell'
+#spawn area is cave cell; change to wherever you need to go for debugging :)))
+currentRoom = 'The Maw Between Hours - Foyer'
 
 showInstructions()
 
@@ -681,57 +689,74 @@ X    □ __ □ __ □ __ □
 
   #if they type 'attack'
   if action[0] == 'attack' :
-    if "enemy" in rooms[currentRoom] and action[1] in rooms[currentRoom]['enemy']:
-      print(action[1] + ' has '+ str(enemies[action[1]]['enemyHP']) +' HP and ' + str(enemies[action[1]]['enemyATK']) + ' attack.')
-      if enemies[action[1]]['enemyHP'] <= playerATK:
-       print(action[1] + ' defeated!')
-       playerHP -= enemies[action[1]]['enemyATK']
-       print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
-       if playerHP <= 0:
-        print("YOU DIED.")
-        break
-       del rooms[currentRoom]['enemy']
-      elif enemies[action[1]]['enemyHP'] > playerATK:
-        enemies[action[1]]['enemyHP'] -= playerATK
-        print(action[1] + ' health decreased by ' + str(playerATK))
-        playerHP -= enemies[action[1]]['enemyATK']
-        print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
-        if playerHP <= 0:
-         print("YOU DIED.")
-         break
+      if "enemy" in rooms[currentRoom] and action[1] in rooms[currentRoom]['enemy']:
+          print(action[1] + ' has '+ str(enemies[action[1]]['enemyHP']) +' HP and ' + str(enemies[action[1]]['enemyATK']) + ' attack.')
+          if enemies[action[1]]['enemyHP'] <= playerATK:
+              print(action[1] + ' defeated!')
+              del rooms[currentRoom]['enemy']
+              playerHP -= enemies[action[1]]['enemyATK']
+              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+          if playerHP <= 0:
+              print("YOU DIED.")
+              break
+          elif enemies[action[1]]['enemyHP'] > playerATK:
+              enemies[action[1]]['enemyHP'] -= playerATK
+              print(action[1] + ' health decreased by ' + str(playerATK))
+              playerHP -= enemies[action[1]]['enemyATK']
+              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + '!')
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
       elif playerHP <= 0:
-        print("YOU DIED.") 
-        break
-    elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
-      print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
-      if bosses[action[1]]['enemyHP'] <= playerATK:
-       print(action[1] + ' defeated!')
-       playerHP -= bosses[action[1]]['enemyATK']
-       print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-       if playerHP <= 0:
-        print("YOU DIED.")
-        break
-       del rooms[currentRoom]['boss']
-      elif bosses[action[1]]['enemyHP'] > playerATK:
-        bosses[action[1]]['enemyHP'] -= playerATK
-        print(action[1] + ' health decreased by ' + str(playerATK))
-        playerHP -= bosses[action[1]]['enemyATK']
-        print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-        if playerHP <= 0:
-         print("YOU DIED.")
-         break
-      elif playerHP <= 0:
-        print("YOU DIED.") 
-        break
-    else:
-      print('Can\'t do ' + action[1] + '!')
+          print("YOU DIED.") 
+          break
+      elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
+          print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
+          if bosses[action[1]]['enemyHP'] <= playerATK:
+              print(action[1] + ' defeated!')
+              del rooms[currentRoom]['boss']
+              inventory.append(bosses[action[1]]['bosskey'])
+              print(bosses[action[1]]['bosskey'] + ' added to inventory!')
+              print(bosses[action[1]]['bosskeydesc'])
+              playerHP -= bosses[action[1]]['enemyATK']
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+          if bosses[action[1]]['enemyHP'] == 0:
+              inventory.append(bosses[action[1]]['bosskey'])
+              print(bosses[action[1]]['bosskeydesc'])
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
+              del rooms[currentRoom]['boss']
+          elif bosses[action[1]]['enemyHP'] > playerATK:
+              bosses[action[1]]['enemyHP'] -= playerATK
+              print(action[1] + ' health decreased by ' + str(playerATK))
+              playerHP -= bosses[action[1]]['enemyATK']
+              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
+              if playerHP <= 0:
+                  print("YOU DIED.")
+                  break
+      else:
+        print('Can\'t do ' + action[1] + '!')
+
+  #   #gain items to progress from the bosses
+  # if action[0] == 'attack' :
+  #   if "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss']:
+  #     if bosses[action[1]]['enemyHP'] == 0:
+  #       inventory.append(bosses[action[1]]['bosskey'])
+  #       print(bosses[action[1]]['bosskeydesc'])
+
+
       
   # ## Define how a player can win
-  # if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
-  #   print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
-  #   break
+  # if currentRoom == 'The Silent Threshold' and 'key' in inventory and 'potion' in inventory:
+  #   print('''
+  # ============================================================================================================================================
+# The tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
+# the mortise. The door opens slowly without a sound, and your breath catches in your throat as you tep through.
+# ============================================================================================================================================'''
+#   #   break
 
-  # ## If a player enters a room with a monster
-  # elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
-  # #   print('A monster has got you... GAME OVER!')
-  #   break
+#   # ## If a player enters a room with a monster
+#   # elif 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
+#   # #   print('A monster has got you... GAME OVER!')
+#   #   break
