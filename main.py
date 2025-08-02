@@ -712,19 +712,12 @@ or begins.
       #get the player's next 'action' as a list array (verb, noun)
       action = ''
       while action == '':
-        action = input('>').lower()       
+        action = input('>')       
       action = action.split(" ", 1)
-      
-
-      if action[0] != "go" or action[0] != "attack" or action[0] != "get" or action[0] != "use" or action[0] != "map" or action[0] != "commands":
-          print("unrecognised command! please try again!")
-
-      elif action[1] not in bosses and action[1] not in rooms and action[1] not in weapons and action[1] not in enemies:
-         print("unrecognised command! please try again!")
-         continue
+    
       
       #if they type 'go' first
-      elif action[0] == 'go':
+      if action[0] == 'go':
         #prevent running from boss
         if "boss" in rooms[currentroom]:
            print("can\'t run from a boss!")
