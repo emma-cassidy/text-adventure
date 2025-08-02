@@ -1,7 +1,6 @@
 #my baby rpg lol
 
-import os
-import sys
+import time
 import random
 import pygame
 import ctypes
@@ -131,6 +130,26 @@ commands:
                 print((bosses[placeholder]['bossdesc']))
                 # del bosses[placeholder]['bossdesc']
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+    def credits():
+        time.sleep(2)
+        print('''
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           Thank you for playing! 
+        
+          Made by spookyghost/Emma
+              
+            Inspired by Joe and
+              our shared love 
+              of FromSoftware
+
+        With thanks to soulBit for his
+         guidance, feedback and advice
+               
+        Thanks to pulchritudedude for his
+            support and playtesting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''')
 
 
     inventory = []
@@ -569,7 +588,7 @@ mortise. something surely fits in here.
     bosses = {
                 'the maw of gentle regret' : {
                       'enemyhp' : 30,
-                      'enemyatk'  : 2,
+                      'enemyatk'  : 45,
                       'bosskey'  : 'tenon of many ends',
                       'bossdesc' : '''
 stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
@@ -801,6 +820,9 @@ x    □ __ □ __ □ __ □
                      script()
                   else:
                       print("Farwell, be stronger next time")
+                      time.sleep(2)
+                      credits()
+                      time.sleep(5)
                       break
                   
               elif enemies[action[1]]['enemyhp'] > playeratk:
@@ -829,6 +851,9 @@ x    □ __ □ __ □ __ □
                         script()
                       else:
                         print("Farwell, be stronger next time")
+                        time.sleep(2)
+                        credits()
+                        time.sleep(5)
                         break
                       
           elif playerhp <= 0:
@@ -850,6 +875,9 @@ x    □ __ □ __ □ __ □
                   script()
               else:
                   print("Farwell, be stronger next time")
+                  time.sleep(2)
+                  credits()
+                  time.sleep(5)
                   break
           
 
@@ -899,6 +927,9 @@ x    □ __ □ __ □ __ □
                           script()
                       else:
                         print("Farwell, be stronger next time")
+                        time.sleep(2)
+                        credits()
+                        time.sleep(5)
                         break
                   del rooms[currentroom]['boss']
               elif bosses[action[1]]['enemyhp'] > playeratk:
@@ -927,6 +958,9 @@ x    □ __ □ __ □ __ □
                           script()
                       else:
                         print("Farwell, be stronger next time")
+                        time.sleep(2)
+                        credits()
+                        time.sleep(5)
                         break
 
 
@@ -981,6 +1015,9 @@ a voice whispers in the darkness:
                           script()
                       else:
                         print("Farwell, be stronger next time")
+                        time.sleep(2)
+                        credits()
+                        time.sleep(5)
                         break
                   del rooms[currentroom]['boss']
               elif bosses[action[1]]['enemyhp'] > playeratk:
@@ -1010,6 +1047,9 @@ a voice whispers in the darkness:
                           script()
                       else:
                         print("Farwell, be stronger next time")
+                        time.sleep(2)
+                        credits()
+                        time.sleep(5)
                         break
 
 
