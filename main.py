@@ -4,11 +4,16 @@ import time
 import random
 import pygame
 import ctypes
+from os import path
+
 ctypes.windll.kernel32.SetConsoleTitleW("False Souls")
+
+path_to_dat = path.abspath(path.join(path.dirname(__file__), 'bgmv3.mp3'))
 
 def script():
     pygame.init()
-    my_sound = pygame.mixer.Sound('c:/users/emmac/python/text-adventure/bgmv3.mp3')
+    my_sound = pygame.mixer.Sound(path_to_dat)
+    
     #loop sound
     my_sound.play(-1)
 
@@ -25,8 +30,8 @@ def script():
       print('''
                                                                                                                                                         
          ████   █    ███                                                  ██████████                                                      
-          ███   ██   ██  █████ ██     ██████  █████    █      █  █████    █   ██   █  █████                                               
-           ██  ████  ██  ██    ██   ███    ███     ██  ██    ██   ██          ██    ██    ███                                             
+          ███   ██   ██  █████ ██    ██████    █████    █     █  █████    █   ██   █  █████                                               
+           ██  ████  ██  ██    ██   ███     ███    ██  ██    ██   ██          ██    ██    ███                                             
            █████ █████   █████ ██   ██      ██     ██  ███  ███   ████        ██    ██     ██                                             
             ███   ███    ██    ██   ███     ██     ██ ██ ████ █   ██          ██    ██     ██                                             
             ██    ███    █████ █████ ███████  ██████  ██  ██  ██ █████        ██      ██████                                              
@@ -62,6 +67,12 @@ select your starting character:
         else:
             print("please choose a valid class.")
       char_name = input("name your character: ")
+      if len(char_name) > 12:
+          print("error; max length 12")
+          time.sleep(3)
+          print("restarting...")
+          time.sleep(2)
+          script()
 
       if char_class == "cleric":
         playerhp = 15
@@ -97,7 +108,7 @@ commands:
   use [item]           (item name)
   map                  (shows map)
   attack [enemy]       (initiates combat)
-  command              (show commands)
+  commands             (show commands)
 
   defeating enemies increases your maximum hp!
   defeating bosses increases your maximum strength!
@@ -119,12 +130,12 @@ commands:
         print('equipment : ' + str(equipment))
         #show an item if there is one
         if "item" in rooms[currentroom]:
-            print('you see a ' + rooms[currentroom]['item'])
+            print('you see a \"' + rooms[currentroom]['item'] + '\"')
         #show an enemy if there is one
         if "enemy" in rooms[currentroom]:
-            print('there is a ' + rooms[currentroom]['enemy'] + ' enemy in here!')
+            print('there is a \"' + rooms[currentroom]['enemy'] + '\" enemy in here!')
         if "boss" in rooms[currentroom]:
-            print('the boss ' + rooms[currentroom]['boss'] + ' prepares to attack!')
+            print('the boss \"' + rooms[currentroom]['boss'] + '\" prepares to attack!')
             placeholder = rooms[currentroom]['boss']
             if bosses[placeholder]['enemyhp'] >= 30:
                 print((bosses[placeholder]['bossdesc']))
@@ -689,7 +700,7 @@ or begins.
                 3 : '''“we’ve done this before. we’ll do it again. one of us must be free.”''',
     }
     #spawn area is cave cell; change to wherever you need to go for debugging :)))
-    currentroom = 'the maw between hours - corridor'
+    currentroom = 'cave cell'
 
     showinstructions()
 
@@ -701,11 +712,19 @@ or begins.
       #get the player's next 'action' as a list array (verb, noun)
       action = ''
       while action == '':
-        action = input('>')       
+        action = input('>').lower()       
       action = action.split(" ", 1)
+      
 
+      if action[0] != "go" or action[0] != "attack" or action[0] != "get" or action[0] != "use" or action[0] != "map" or action[0] != "commands":
+          print("unrecognised command! please try again!")
+
+      elif action[1] not in bosses and action[1] not in rooms and action[1] not in weapons and action[1] not in enemies:
+         print("unrecognised command! please try again!")
+         continue
+      
       #if they type 'go' first
-      if action[0] == 'go':
+      elif action[0] == 'go':
         #prevent running from boss
         if "boss" in rooms[currentroom]:
            print("can\'t run from a boss!")
@@ -719,12 +738,12 @@ or begins.
             print('you can\'t go that way!')
 
       #if they type 'commands'
-      if action[0] == 'command' or action[0] == "commands":
+      elif action[0] == "commands":
          showinstructions()
          
 
       #if they type 'get' first
-      if action[0] == 'get' :
+      elif action[0] == 'get' :
         if "item" in rooms[currentroom] and action[1] in rooms[currentroom]['item']:
           inventory.append(action[1])
           print(action[1] + ' acquired.')
@@ -734,7 +753,7 @@ or begins.
 
 
       #to use an item
-      if action[0] == 'use' :
+      elif action[0] == 'use' :
         if "item" in rooms[currentroom] and action[1] in rooms[currentroom]['item']:
           print(action[1] + ' must be picked up first!')
         elif action[1] in inventory and action[1] == 'elixir of soul':
@@ -756,7 +775,7 @@ or begins.
           print('can\'t use ' + action[1] + '!')
           
       #show map
-      if action[0] == 'map' :
+      elif action[0] == 'map' :
         print('''
               
 map:
@@ -781,7 +800,7 @@ x    □ __ □ __ □ __ □
 
 
       #attacking a normal enemy
-      if action[0] == 'attack' :
+      elif action[0] == 'attack' :
           if "enemy" in rooms[currentroom] and action[1] in rooms[currentroom]['enemy']:
               print(action[1] + ' has '+ str(enemies[action[1]]['enemyhp']) +' hp and ' + str(enemies[action[1]]['enemyatk']) + ' attack.')
               if playerlck == 0:

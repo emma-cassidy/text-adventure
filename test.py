@@ -4,8 +4,9 @@ import sys
 print("UWU")
 print("owo")
 
+rooms = "grasp of many"
 
-
+print('there is a \"' + rooms + '\" enemy in here!')
 
 
 while True:
