@@ -588,7 +588,7 @@ mortise. something surely fits in here.
     bosses = {
                 'the maw of gentle regret' : {
                       'enemyhp' : 30,
-                      'enemyatk'  : 45,
+                      'enemyatk'  : 3,
                       'bosskey'  : 'tenon of many ends',
                       'bossdesc' : '''
 stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
@@ -600,7 +600,7 @@ all who enter are remembered. none as themselves. purpose decays. but hunger per
                     },
                 'lady vestige, the bound echo' : {
                       'enemyhp' : 30,
-                      'enemyatk'  : 3,
+                      'enemyatk'  : 4,
                       'bosskey'  : 'tenon of unspoken shapes',
                       'bossdesc' : '''
 once a seeker of escape through knowledge, she unmade herself word by word.
