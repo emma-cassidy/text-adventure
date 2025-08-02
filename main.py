@@ -1,19 +1,27 @@
-#My baby RPG lol
+#my baby rpg lol
 
+import os
+import sys
 import random
+import pygame
 import ctypes
 ctypes.windll.kernel32.SetConsoleTitleW("EMMA RING")
 
-playerHP = 0
-playerSTR = 0
-playerLCK = 0
-playerATK = 0
+pygame.init()
+my_sound = pygame.mixer.Sound('c:/users/emmac/python/text-adventure/bgmv3.mp3')
+#loop sound
+my_sound.play(-1)
+
+playerhp = 0
+playerstr = 0
+playerlck = 0
+playeratk = 0
 char_name = ""
 char_class = ""
 weapondamage = 1
 finalbossturn = 1
 
-def characterSelect():
+def characterselect():
   print('''
                                                                                                                                                     
                                  ████   █    ███                                                  ██████████                                                      
@@ -41,664 +49,665 @@ def characterSelect():
                                                                                                                                                                   
                                                                         
 ============================================================================================================================================
-Select your starting character:
-  Cleric - 8HP, 2 Strength, 2 Luck 
-  Warrior - 5HP, 5 Strength, 0 Luck
-  Rogue - 5HP, 2 Strength, 5 Luck
+select your starting character:
+  cleric - 15hp, 2 strength, 2 luck 
+  warrior - 12hp, 5 strength, 0 luck
+  rogue - 10hp, 2 strength, 5 luck
         
-  Attack = (Strength x Weapon Damage) + Luck
+  attack = (strength x weapon damage) + luck
 ============================================================================================================================================
 ''')
   while True:
-    char_class = input("Choose your class. Enter Cleric, Warrior or Rogue: ").lower()
-    if char_class in ["cleric", "warrior", "rogue", "dovahkiin",]:
+    char_class = input("choose your class. enter cleric, warrior or rogue: ").lower()
+    if char_class in ["cleric", "warrior", "rogue", "altmer",]:
         break
     else:
-        print("Please choose a valid class.")
-  char_name = input("Name your character: ")
+        print("please choose a valid class.")
+  char_name = input("name your character: ")
 
   if char_class == "cleric":
-    playerHP = 8
-    playerSTR = 2
-    playerLCK = 2
+    playerhp = 15
+    playerstr = 2
+    playerlck = 2
   elif char_class == "warrior":
-    playerHP = 5
-    playerSTR = 5
-    playerLCK = 0
+    playerhp = 12
+    playerstr = 5
+    playerlck = 0
   elif char_class == "rogue":
-    playerHP = 5
-    playerSTR = 2
-    playerLCK = 5
+    playerhp = 10
+    playerstr = 2
+    playerlck = 5
   else:
-    playerHP = 50
-    playerSTR = 15
-    playerLCK = 10
+    playerhp = 50
+    playerstr = 15
+    playerlck = 10
   
-  return char_name, char_class, playerHP, playerSTR, playerLCK
+  return char_name, char_class, playerhp, playerstr, playerlck
 
 
-char_name, char_class, playerHP, playerSTR, playerLCK = characterSelect()
+char_name, char_class, playerhp, playerstr, playerlck = characterselect()
 placeholder = "test"
-maxHP = playerHP
+maxhp = playerhp
 
-def showInstructions():
+def showinstructions():
   print(f'''
-Welcome to EMMA RING, {char_class} {char_name}!
+welcome to emma ring, {char_class} {char_name}!
 ============================================================================================================================================
-Commands:
+commands:
   go [direction]       (north, south, east, west)
   get [item]           (item name)
   use [item]           (item name)
   map                  (shows map)
   attack [enemy]       (initiates combat)
 
-  Defeating enemies increases your maximum HP!
-  Defeating bosses increases your maximum Strength!
+  defeating enemies increases your maximum hp!
+  defeating bosses increases your maximum strength!
 ============================================================================================================================================
 ''')
 
-def showStatus():
+def showstatus():
     #print the player's current status
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print('You are in the ' + currentRoom)
-    #show current stats
-    print(f'You have {playerHP} HP of a maximum {maxHP}, {playerSTR} strength, and {playerLCK} luck.')
-    print(f'Your attack stat is {playerATK}.')
-    #show the current inventory and equipment
-    print('Inventory : ' + str(inventory))
-    print('Equipment : ' + str(equipment))
     #print description if there is one
-    if "desc" in rooms[currentRoom]:
-        print((rooms[currentRoom]['desc']))
+    if "desc" in rooms[currentroom]:
+        print((rooms[currentroom]['desc']))
+    print('you are in the ' + currentroom)
+    #show current stats
+    print(f'you have {playerhp} hp of a maximum {maxhp}, {playerstr} strength, and {playerlck} luck.')
+    print(f'your attack stat is {playeratk}.')
+    #show the current inventory and equipment
+    print('inventory : ' + str(inventory))
+    print('equipment : ' + str(equipment))
     #show an item if there is one
-    if "item" in rooms[currentRoom]:
-        print('You see a ' + rooms[currentRoom]['item'])
+    if "item" in rooms[currentroom]:
+        print('you see a ' + rooms[currentroom]['item'])
     #show an enemy if there is one
-    if "enemy" in rooms[currentRoom]:
-        print('There is a ' + rooms[currentRoom]['enemy'] + ' enemy in here!')
-    if "boss" in rooms[currentRoom]:
-        print('The boss ' + rooms[currentRoom]['boss'] + ' prepares to attack!')
-        placeholder = rooms[currentRoom]['boss']
-        if bosses[placeholder]['enemyHP'] >= 30:
+    if "enemy" in rooms[currentroom]:
+        print('there is a ' + rooms[currentroom]['enemy'] + ' enemy in here!')
+    if "boss" in rooms[currentroom]:
+        print('the boss ' + rooms[currentroom]['boss'] + ' prepares to attack!')
+        placeholder = rooms[currentroom]['boss']
+        if bosses[placeholder]['enemyhp'] >= 30:
             print((bosses[placeholder]['bossdesc']))
+            del bosses[placeholder]['bossdesc']
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 inventory = []
-equipment = ["Bare Hands"]
+equipment = ["bare hands"]
 
 rooms = {
 
-            'Cave Cell' : {
-                  'south' : 'Cave Tunnel',
-                  'item'  : 'Broken Sword',
+            'cave cell' : {
+                  'south' : 'cave tunnel',
+                  'item'  : 'broken sword',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a dank, dark cave, with a broken chain at your feet. Your neck is sore, as if you were restrained by it. The only way to go 
+you are in a dank, dark cave, with a broken chain at your feet. your neck is sore, as if you were restrained by it. the only way to go 
 is through the cave tunnel you see to your south.
 
 ============================================================================================================================================''',
                 },
 
-            'Cave Tunnel' : {
-                  'north' : 'Cave Cell',
-                  'south' : 'Cave Mouth - South',
-                  'east'  : 'Cave Mouth - East',
+            'cave tunnel' : {
+                  'north' : 'cave cell',
+                  'south' : 'cave mouth - south',
+                  'east'  : 'cave mouth - east',
                   'desc'  : '''
 ============================================================================================================================================
-You are in a cave tunnel as fetid as the cell you just came from. There are two cave mouths. One to your east, and one to your south.
-There are shuffling, moaning sounds coming from both directions.
+you are in a cave tunnel as fetid as the cell you just came from. there are two cave mouths. one to your east, and one to your south.
+there are shuffling, moaning sounds coming from both directions.
 
 ============================================================================================================================================''',
                 },
-            'Cave Mouth - South' : {
-                  'north' : 'Cave Tunnel',
-                  'east'  : 'Cliff Edge - East',
-                  'enemy' : 'Feral Remnant',
+            'cave mouth - south' : {
+                  'north' : 'cave tunnel',
+                  'east'  : 'cliff edge - east',
+                  'enemy' : 'feral remnant',
                   'desc'  : '''
 ============================================================================================================================================
-The cave mouth faces out onto a sheer cliff opening. You see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
-In the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
-elsewhere. To your north is the cave tunnel.
+the cave mouth faces out onto a sheer cliff opening. you see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
+in the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
+elsewhere. to your north is the cave tunnel.
 
 ============================================================================================================================================''',
                },
-            'Cave Mouth - East' : {
-                  'west' : 'Cave Tunnel',
-                  'north' : 'Cliff Ledge',
-                  'south' : 'Cliff Edge - East',
-                  'enemy' : 'Feral Remnant',
+            'cave mouth - east' : {
+                  'west' : 'cave tunnel',
+                  'north' : 'cliff ledge',
+                  'south' : 'cliff edge - east',
+                  'enemy' : 'feral remnant',
                   'desc'  : '''
 ============================================================================================================================================
-The cave mouth faces out onto a sheer cliff opening. You see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
-In the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
-elsewhere. To your west is the cave tunnel. To your south is the cliff edge, where you can hear a faint moaning. To your north, there seems
+the cave mouth faces out onto a sheer cliff opening. you see dark, cloudy skies for a few miles with crashing - yet silent - waves below.
+in the distance beyond the cloud and waves you see an endless abyss of darkness, as if you the land on which you stand has been plucked from
+elsewhere. to your west is the cave tunnel. to your south is the cliff edge, where you can hear a faint moaning. to your north, there seems
 to be a ledge you could climb.
 
 ============================================================================================================================================''',
                },
-            'Cliff Edge - East' : {
-                  'north' : 'Cave Mouth - East',
-                  'west'  : 'Cave Mouth - South',
-                  'enemy' : 'Whispering Mistborn',
+            'cliff edge - east' : {
+                  'north' : 'cave mouth - east',
+                  'west'  : 'cave mouth - south',
+                  'enemy' : 'whispering mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You stand on the precipice, staring out into the silent darkness. There is no other way forward except back north to the cave mouth.
+you stand on the precipice, staring out into the silent darkness. there is no other way forward except back north to the cave mouth.
 
 ============================================================================================================================================''',
                 },
-            'Cliff Ledge' : {
-                  'north' : 'Crack in the wall',
-                  'south' : 'Cave Mouth - East',
-                  'east'  : 'Wrought Iron Fence',
+            'cliff ledge' : {
+                  'north' : 'crack in the wall',
+                  'south' : 'cave mouth - east',
+                  'east'  : 'wrought iron fence',
                   'desc'  : '''
 ============================================================================================================================================
-You scramble onto the ledge, and to your east notice a wrought iron fence you could climb. To your north, there is a crack in a large stone
-wall, large enough for you to squeeze into. To your south below you lies the cave mouth.
+you scramble onto the ledge, and to your east notice a wrought iron fence you could climb. to your north, there is a crack in a large stone
+wall, large enough for you to squeeze into. to your south below you lies the cave mouth.
 
 ============================================================================================================================================''',
                 },
-            'Crack in the wall' : {
-                  'south' : 'Cliff Ledge',
-                  'east'  : 'The Maw Between Hours - Corridor',
-                  'enemy' : 'Half-Born Remnant',
-                  'item'  : 'Elixir of Flesh',
+            'crack in the wall' : {
+                  'south' : 'cliff ledge',
+                  'east'  : 'the maw between hours - corridor',
+                  'enemy' : 'half-born remnant',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-From your location in the crevice of the thick stone wall, you notice what seems to be a grand corridor to your east. The air is pungent 
-with rot and decay, punctured only by the fresh air flowing from the cliff ledge to your south. You hear movement in the building to your
+from your location in the crevice of the thick stone wall, you notice what seems to be a grand corridor to your east. the air is pungent 
+with rot and decay, punctured only by the fresh air flowing from the cliff ledge to your south. you hear movement in the building to your
 east. 
 
 ============================================================================================================================================''',
             },
-            'Wrought Iron Fence' : {
-                  'west' : 'Cliff Ledge',
-                  'south' : 'Graveyard',
-                  'east'  : 'The Garden',
+            'wrought iron fence' : {
+                  'west' : 'cliff ledge',
+                  'south' : 'graveyard',
+                  'east'  : 'garden',
                   'desc'  : '''
 ============================================================================================================================================
-From your position atop the wrought iron fence, to the east you spy what seems to be a derelict yet once loved garden, with a dried fountain, 
-barren soil and withered trees. To your south there are unmistakeably graves whose inhabitants' names have been lost to time.
+from your position atop the wrought iron fence, to the east you spy what seems to be a derelict yet once loved garden, with a dried fountain, 
+barren soil and withered trees. to your south there are unmistakeably graves whose inhabitants' names have been lost to time.
 
 ============================================================================================================================================''',
                },
-            'Graveyard' : {
-                  'north' : 'Wrought Iron Fence',
-                  'east'  : 'Disused Training Yard',
-                  'enemy' : 'Whispering Mistborn',
-                  'item'  : 'Elixir of Flesh',
+            'graveyard' : {
+                  'north' : 'wrought iron fence',
+                  'east'  : 'disused training yard',
+                  'enemy' : 'whispering mistborn',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-The graveyard is full of tombstones of varying shapes and sizes, with some modern black marble and others crumbling sandstone and lime. They
+the graveyard is full of tombstones of varying shapes and sizes, with some modern black marble and others crumbling sandstone and lime. they
 have one thing in common - all have clearly been forgotten - but appear to be those of heroes, judging from the decayed and rusted weapons
-and shields littered around them in tribute. The iron fence is to your north, and to your east you see a disused training yard.
+and shields littered around them in tribute. the iron fence is to your north, and to your east you see a disused training yard.
 
 ============================================================================================================================================''',
             },
-            'The Garden' : {
-                  'west' : 'Wrought Iron Fence',
-                  'north' : 'Main Foyer',
-                  'south' : 'Disused Training Yard',
-                  'east'  : 'Carriage House',
-                  'enemy' : 'Whispering Mistborn',
+            'garden' : {
+                  'west' : 'wrought iron fence',
+                  'north' : 'main foyer',
+                  'south' : 'disused training yard',
+                  'east'  : 'carriage house',
+                  'enemy' : 'whispering mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-You stand in the remains of a once-loved garden, evidenced by the dried earth of the former flower beds that garnished the mossy cobble path and
-surround the bases of the corpses of trees. West is the iron fence, south is an old training yard, and east appears to be a derelict carriage
-house. Directly north is a grand entryway into what appears to be some kind of manor or castle. The arched ironwood door is an anomaly among 
-the blatant disrepair, standing tall and imposing, as sound and polished as the day it was made. The carvings of the tympanum above are
+you stand in the remains of a once-loved garden, evidenced by the dried earth of the former flower beds that garnished the mossy cobble path and
+surround the bases of the corpses of trees. west is the iron fence, south is an old training yard, and east appears to be a derelict carriage
+house. directly north is a grand entryway into what appears to be some kind of manor or castle. the arched ironwood door is an anomaly among 
+the blatant disrepair, standing tall and imposing, as sound and polished as the day it was made. the carvings of the tympanum above are
 unintelligble, however.
 
 ============================================================================================================================================''',
                },
-            'Disused Training Yard' : {
-                  'west' : 'Graveyard',
-                  'north' : 'The Garden',
-                  'east'  : 'Worn Barracks',
-                  'enemy' : 'Fallen Adventurer',
-                  'item'  : 'Rusted Axe',
+            'disused training yard' : {
+                  'west' : 'graveyard',
+                  'north' : 'garden',
+                  'east'  : 'worn barracks',
+                  'enemy' : 'fallen adventurer',
+                  'item'  : 'rusted axe',
                   'desc'  : '''
 ============================================================================================================================================
-Rotten straw men lay strewn across the ground, clearly having been target practice in the past, surrounded by an assortment of old weapons.
-To the west lays the graveyard, and to the east, an old barracks building. North is the garden.
+rotten straw men lay strewn across the ground, clearly having been target practice in the past, surrounded by an assortment of old weapons.
+to the west lays the graveyard, and to the east, an old barracks building. north is the garden.
 
 ============================================================================================================================================''',
             },
-            'Carriage House' : {
-                  'west' : 'The Garden',
-                  'south' : 'Worn Barracks',
-                  'item'  : 'Elixir of Soul',
+            'carriage house' : {
+                  'west' : 'garden',
+                  'south' : 'worn barracks',
+                  'item'  : 'elixir of soul',
                   'desc'  : '''
 ============================================================================================================================================
-The carriage house must have been a grand affair once, its simple design disguising the use of elegant woods in its construction. Rusted
-troughs lay to one side where horses must have been fed and watered by their coachmen. There are no signs of any vehicle or animal now save
-for a bent old wheel to one side in the dusty building. Looking out west, you see the garden and to the south, a similarly dusty barracks.
+the carriage house must have been a grand affair once, its simple design disguising the use of elegant woods in its construction. rusted
+troughs lay to one side where horses must have been fed and watered by their coachmen. there are no signs of any vehicle or animal now save
+for a bent old wheel to one side in the dusty building. looking out west, you see the garden and to the south, a similarly dusty barracks.
 
 ============================================================================================================================================''',
                },
-            'Worn Barracks' : {
-                  'west' : 'Disused Training Yard',
-                  'north' : 'Carriage House',
-                  'enemy' : 'Feral Remnant',
-                  'item'  : 'Steel Greatsword',
+            'worn barracks' : {
+                  'west' : 'disused training yard',
+                  'north' : 'carriage house',
+                  'enemy' : 'feral remnant',
+                  'item'  : 'steel greatsword',
                   'desc'  : '''
 ============================================================================================================================================
-You step through the splinters that were once a door into a musty old barracks. Its a relatively small affair, with space and lodgings for
-no more than ten guards. There are still a few mouldy hay mattresses dotted around, and an assortment of old weaponry. West lays the training
+you step through the splinters that were once a door into a musty old barracks. its a relatively small affair, with space and lodgings for
+no more than ten guards. there are still a few mouldy hay mattresses dotted around, and an assortment of old weaponry. west lays the training
 yard, and to the north is the carriage house.
 
 ============================================================================================================================================''',
             },
-            'Main Foyer' : {
-                  'north' : 'Hall of the Unnumbered Trials - South',
-                  'south' : 'The Garden',
-                  'enemy' : 'Whispering Mistborn',
+            'main foyer' : {
+                  'north' : 'hall of the unnumbered trials - south',
+                  'south' : 'garden',
+                  'enemy' : 'whispering mistborn',
                   'desc'  : '''
 ============================================================================================================================================
-The foyer seems out of place compared to outside - barring a little dust, it looks relatively modern, with ornate wainscoting in a lush dark
+the foyer seems out of place compared to outside - barring a little dust, it looks relatively modern, with ornate wainscoting in a lush dark
 wood with lighter appliques surrounding the doorway to the garden in the south and a similar doorway to the north. 
 
 ============================================================================================================================================''',
                },
-            'Hall of the Unnumbered Trials - South' : {
-                  'west' : 'The Maw Between Hours - Foyer',
-                  'north' : 'Hall of the Unnumbered Trials - North',
-                  'south' : 'Main Foyer',
-                  'east'  : 'The Cradle That Remembers - Foyer',
+            'hall of the unnumbered trials - south' : {
+                  'west' : 'the maw between hours - foyer',
+                  'north' : 'hall of the unnumbered trials - north',
+                  'south' : 'main foyer',
+                  'east'  : 'the cradle that remembers - foyer',
                   'desc'  : '''
 ============================================================================================================================================
-The wainscoting of the main foyer continues in to a grand hall, so large you are almost unable to see the northern end. Along the walls above the
+the wainscoting of the main foyer continues in to a grand hall, so large you are almost unable to see the northern end. along the walls above the
 wooden pannelling are stonecarved reliefs of figures, each wearing distinct attire and armour - as if in rememberance of previous heroes to tread
-the same path you are on. There is an empty space, waiting for its next inhabitant. There are two doors, one to the west and one to the east.
-To the north, there seem to be two more, similarly on each side.
+the same path you are on. there is an empty space, waiting for its next inhabitant. there are two doors, one to the west and one to the east.
+to the north, there seem to be two more, similarly on each side.
 
 ============================================================================================================================================''',
             },
-            'The Maw Between Hours - Corridor' : {
-                  'west' : 'Crack in the wall',
-                  'north' : 'The Maw Between Hours - Foyer',
-                  'enemy' : 'Half-Born Remnant',
-                  'item'  : 'Elixir of Soul',
+            'the maw between hours - corridor' : {
+                  'west' : 'crack in the wall',
+                  'north' : 'the maw between hours - foyer',
+                  'enemy' : 'half-born remnant',
+                  'item'  : 'elixir of soul',
                   'desc'  : '''
 ============================================================================================================================================
-The thick miasma of stench tainted by decay almost overwhelms you, but the gentle breeze through the crack in the west wall aids in your
-resolve. The otherwise fine hallway leads north to the foyer.
+the thick miasma of stench tainted by decay almost overwhelms you, but the gentle breeze through the crack in the west wall aids in your
+resolve. the otherwise fine hallway leads north to the foyer.
 
 ============================================================================================================================================''',
                },
-            'The Maw Between Hours - Foyer' : {
-                  'west' : 'The Maw Between Hours - Hall',
-                  'south' : 'The Maw Between Hours - Corridor',
-                  'east'  : 'Hall of the Unnumbered Trials - South',
-                  'enemy' : 'Grasp of Many',
+            'the maw between hours - foyer' : {
+                  'west' : 'the maw between hours - hall',
+                  'south' : 'the maw between hours - corridor',
+                  'east'  : 'hall of the unnumbered trials - south',
+                  'enemy' : 'grasp of many',
                   'desc'  : '''
 ============================================================================================================================================
-The repugnant stench of decay and despair becomes suffocating as you near its source. To the east, you see the door back to the vast hall of
-other doors, and to your south, the corridor with a crack in the wall to the outside. West lays a grand hall, where the source of the
+the repugnant stench of decay and despair becomes suffocating as you near its source. to the east, you see the door back to the vast hall of
+other doors, and to your south, the corridor with a crack in the wall to the outside. west lays a grand hall, where the source of the
 miasma appears to be.
 
 ============================================================================================================================================''',
                },
-            'The Maw Between Hours - Hall' : {
-                  'east'  : 'The Maw Between Hours - Foyer',
-                  'boss' : 'The Maw of Gentle Regret',
+            'the maw between hours - hall' : {
+                  'east'  : 'the maw between hours - foyer',
+                  'boss' : 'the maw of gentle regret',
                   'desc'  : '''
 ============================================================================================================================================
-The hall must once have been a grand dining room, the polished marbled floor thick with a sludge that has the taint of rotten flesh and
-blood. The furniture, what is left of it, has all been swept to one side and there are distinct long bones of discarded limbs scattered
+the hall must once have been a grand dining room, the polished marbled floor thick with a sludge that has the taint of rotten flesh and
+blood. the furniture, what is left of it, has all been swept to one side and there are distinct long bones of discarded limbs scattered
 amongst the filth.
 
 ============================================================================================================================================''',
                },
-            'The Cradle That Remembers - Foyer' : {
-                  'west' : 'Hall of the Unnumbered Trials - South',
-                  'south' : 'The Cradle That Remembers - Corridor',
-                  'east'  : 'The Cradle That Remembers - Antechamber',
-                  'enemy' : 'Husk of Knowing',
-                  'item'  : 'Heavy Mace',
+            'the cradle that remembers - foyer' : {
+                  'west' : 'hall of the unnumbered trials - south',
+                  'south' : 'the cradle that remembers - corridor',
+                  'east'  : 'the cradle that remembers - antechamber',
+                  'enemy' : 'husk of knowing',
+                  'item'  : 'heavy mace',
                   'desc'  : '''
 ============================================================================================================================================
-This foyer has a lilting sadness somehow upon it. Lost books litter the floor, as if discarded in a hurry by someone searching for answers 
-of the utmost import. To the south is a corridor, and to the east, an antechamber of some kind. To the west lays the long hallway of doors
+this foyer has a lilting sadness somehow upon it. lost books litter the floor, as if discarded in a hurry by someone searching for answers 
+of the utmost import. to the south is a corridor, and to the east, an antechamber of some kind. to the west lays the long hallway of doors
 and forgotten faces.
 
 ============================================================================================================================================''',
             },
-            'The Cradle That Remembers - Corridor' : {
-                  'north' : 'The Cradle That Remembers - Foyer',
-                  'east'  : 'The Cradle That Remembers - Cradle',
-                  'enemy' : 'Husk of Knowing',
-                  'enemy' : 'Vessel of Errant Insight',
-                  'item'  : 'Elixir of Flesh',
+            'the cradle that remembers - corridor' : {
+                  'north' : 'the cradle that remembers - foyer',
+                  'east'  : 'the cradle that remembers - cradle',
+                  'enemy' : 'husk of knowing',
+                  'enemy' : 'vessel of errant insight',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-Various faded artworks detail the walls, masking some of the faded silken wallpaper. There are indecipherable scrawls along the walls at
-intervals that appear to have been written at different times from the shades of the ink, yet strangely all with the same hand. To the east 
+various faded artworks detail the walls, masking some of the faded silken wallpaper. there are indecipherable scrawls along the walls at
+intervals that appear to have been written at different times from the shades of the ink, yet strangely all with the same hand. to the east 
 the hall opens into a grand library, and to the north the foyer that leads back to the hall.
 
 ============================================================================================================================================''',
             },
-            'The Cradle That Remembers - Antechamber' : {
-                  'west' : 'The Cradle That Remembers - Foyer',
-                  'south' : 'The Cradle That Remembers - Cradle',
-                  'enemy' : 'Husk of Knowing',
-                  'enemy' : 'Vessel of Errant Insight',
-                  'item'  : 'Elixir of Soul',
+            'the cradle that remembers - antechamber' : {
+                  'west' : 'the cradle that remembers - foyer',
+                  'south' : 'the cradle that remembers - cradle',
+                  'enemy' : 'husk of knowing',
+                  'enemy' : 'vessel of errant insight',
+                  'item'  : 'elixir of soul',
                   'desc'  : '''
 ============================================================================================================================================
-Old and overused furniture is strewn around the antechamber as if someone had been living here for a very long time. Stacks upon stacks of
-books surround the various seats like someone had worn out each in turn whilst searching for answers. To the south lays a grand library, and
+old and overused furniture is strewn around the antechamber as if someone had been living here for a very long time. stacks upon stacks of
+books surround the various seats like someone had worn out each in turn whilst searching for answers. to the south lays a grand library, and
 to the west, the foyer that leads back to the main hall.
 
 ============================================================================================================================================''',
             },
-            'The Cradle That Remembers - Cradle' : {
-                  'west' : 'The Cradle That Remembers - Corridor',
-                  'north' : 'The Cradle That Remembers - Antechamber',
-                  'boss' : 'Lady Vestige, the Bound Echo',
+            'the cradle that remembers - cradle' : {
+                  'west' : 'the cradle that remembers - corridor',
+                  'north' : 'the cradle that remembers - antechamber',
+                  'boss' : 'lady vestige, the bound echo',
                   'desc'  : '''
 ============================================================================================================================================
-The library houses thousands, if not more, books that once lurked on their many shelves. Cobwebs and filth cover most of the room, save for
-a corner where there had recently been activity. A solitary desk stands alone, covered in reams of parchment decorated in the same archaic
-script that adorns the walls of the corridor to the west. To the north lays the antechamber where someone had clearly been residing.
+the library houses thousands, if not more, books that once lurked on their many shelves. cobwebs and filth cover most of the room, save for
+a corner where there had recently been activity. a solitary desk stands alone, covered in reams of parchment decorated in the same archaic
+script that adorns the walls of the corridor to the west. to the north lays the antechamber where someone had clearly been residing.
 
 ============================================================================================================================================''',
                },
-            'Hall of the Unnumbered Trials - North' : {
-                  'west' : 'Vault of the Once-Whole - Foyer',
-                  'north' : 'The Silent Threshold',
-                  'south' : 'Hall of the Unnumbered Trials - South',
-                  'east'  : 'Sepulchre of the Unmarked Step - Foyer',
+            'hall of the unnumbered trials - north' : {
+                  'west' : 'vault of the once-whole - foyer',
+                  'north' : 'the silent threshold',
+                  'south' : 'hall of the unnumbered trials - south',
+                  'east'  : 'sepulchre of the unmarked step - foyer',
                   'desc'  : '''
 ============================================================================================================================================
-The north end of the grand hall is as painstakingly decorated as its southern counterpart. The carved reliefs of heroes past continue to
-adorn the walls above the familiar dark wainscoting - is that a hint of sadness you see on the faces? There are two doors, one to the west 
-and one to the east. Back south, you can vaguely make out the same in the darkness.
+the north end of the grand hall is as painstakingly decorated as its southern counterpart. the carved reliefs of heroes past continue to
+adorn the walls above the familiar dark wainscoting - is that a hint of sadness you see on the faces? there are two doors, one to the west 
+and one to the east. back south, you can vaguely make out the same in the darkness.
 
 ============================================================================================================================================''',
             },
-            'Sepulchre of the Unmarked Step - Foyer' : {
-                  'west' : 'Hall of the Unnumbered Trials - North',
-                  'north' : 'Sepulchre of the Unmarked Step - Wasted Tomb',
-                  'east'  : 'Sepulchre of the Unmarked Step - Funerary Parlour',
-                  'enemy' : 'Votary of Many Tongues',
+            'sepulchre of the unmarked step - foyer' : {
+                  'west' : 'hall of the unnumbered trials - north',
+                  'north' : 'sepulchre of the unmarked step - wasted tomb',
+                  'east'  : 'sepulchre of the unmarked step - funerary parlour',
+                  'enemy' : 'votary of many tongues',
                   'desc'  : '''
 ============================================================================================================================================
-This foyer has an uncanny stillness about it - the stillness of the dead. To the north lies a suspciously empty room, and to the east, a room
-with some form of workstation. The west holds the door returning to the hall.
+this foyer has an uncanny stillness about it - the stillness of the dead. to the north lies a suspciously empty room, and to the east, a room
+with some form of workstation. the west holds the door returning to the hall.
 
 ============================================================================================================================================''',
                },
-            'Sepulchre of the Unmarked Step - Wasted Tomb' : {
-                  'south' : 'Sepulchre of the Unmarked Step - Foyer',
-                  'east'  : 'Sepulchre of the Unmarked Step - Undercroft',
-                  'enemy' : 'Votary of Many Tongues',
-                  'enemy' : 'Lamenting Vestal',
-                  'item'  : 'Elixir of Flesh',
+            'sepulchre of the unmarked step - wasted tomb' : {
+                  'south' : 'sepulchre of the unmarked step - foyer',
+                  'east'  : 'sepulchre of the unmarked step - undercroft',
+                  'enemy' : 'votary of many tongues',
+                  'enemy' : 'lamenting vestal',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-Other than what appears to be an empty stone casket laying on a flagstone floor, there is nothing of note in this dusty room. The foyer is
+other than what appears to be an empty stone casket laying on a flagstone floor, there is nothing of note in this dusty room. the foyer is
 back to the south, and to the east you can make of the distinctive vaulted appearance of an undercroft.
 
 ============================================================================================================================================''',
                },
-            'Sepulchre of the Unmarked Step - Funerary Parlour' : {
-                  'west' : 'Sepulchre of the Unmarked Step - Foyer',
-                  'north'  : 'Sepulchre of the Unmarked Step - Undercroft',
-                  'enemy' : 'Votary of Many Tongues',
-                  'enemy' : 'Lamenting Vestal',
-                  'item'  : 'Elixir of Flesh',
+            'sepulchre of the unmarked step - funerary parlour' : {
+                  'west' : 'sepulchre of the unmarked step - foyer',
+                  'north'  : 'sepulchre of the unmarked step - undercroft',
+                  'enemy' : 'votary of many tongues',
+                  'enemy' : 'lamenting vestal',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-What appeared to simply be a workstation seems to actually be a preparation station for... bodies. A large marble slab sits pride of place
-in the centre and is covered with blackened red stains. To one side there are shelves, with various dusty containers, and fine tools perhaps
-for stripping flesh from bone. There is a painting on the slab, eerily similar to the faces in the reliefs of the grand hallway, almost as 
-if to be used as a reference. To the north lays the vaulted arches of an undercroft, and to the west the foyer back to the main hall.
+what appeared to simply be a workstation seems to actually be a preparation station for... bodies. a large marble slab sits pride of place
+in the centre and is covered with blackened red stains. to one side there are shelves, with various dusty containers, and fine tools perhaps
+for stripping flesh from bone. there is a painting on the slab, eerily similar to the faces in the reliefs of the grand hallway, almost as 
+if to be used as a reference. to the north lays the vaulted arches of an undercroft, and to the west the foyer back to the main hall.
 
 ============================================================================================================================================''',
             },
-            'Sepulchre of the Unmarked Step - Undercroft' : {
-                  'west' : 'Sepulchre of the Unmarked Step - Wasted Tomb',
-                  'south'  : 'Sepulchre of the Unmarked Step - Funerary Parlour',
-                  'boss' : 'The Choir of One',
+            'sepulchre of the unmarked step - undercroft' : {
+                  'west' : 'sepulchre of the unmarked step - wasted tomb',
+                  'south'  : 'sepulchre of the unmarked step - funerary parlour',
+                  'boss' : 'the choir of one',
                   'desc'  : '''
 ============================================================================================================================================
-You stand in the middle of a grand, vaulted room that houses sacks of materials in the corners. They spill out, seeming to be a cement of
-some description. Alongside them, there are a couple of skeletons in old ragged armour whose faces have been perfectly preserved as if alive
+you stand in the middle of a grand, vaulted room that houses sacks of materials in the corners. they spill out, seeming to be a cement of
+some description. alongside them, there are a couple of skeletons in old ragged armour whose faces have been perfectly preserved as if alive
 yet smothered in plaster.
 
 ============================================================================================================================================''',
             },
-            'Vault of the Once-Whole - Foyer' : {
-                  'west' : 'Vault of the Once-Whole - Gaolers Quarters',
-                  'north' : 'Vault of the Once-Whole - Stockade',
-                  'east'  : 'Hall of the Unnumbered Trials - North',
-                  'enemy' : 'Chained Forlorn',
-                  'item'  : 'Steel Warhammer',
+            'vault of the once-whole - foyer' : {
+                  'west' : 'vault of the once-whole - gaolers quarters',
+                  'north' : 'vault of the once-whole - stockade',
+                  'east'  : 'hall of the unnumbered trials - north',
+                  'enemy' : 'chained forlorn',
+                  'item'  : 'steel warhammer',
                   'desc'  : '''
 ============================================================================================================================================
-The rough cut stone floor of the foyer is marked with scratches and deep gouges, as if a battle had taken place here long before. Stale yet
-still liquid blood congeals underfoot. To the west is a small room that perhaps once housed a guard, and to the north you see some makeshift
-fortifications as if against some threat further inside. Back east lays the door to the main hall.
+the rough cut stone floor of the foyer is marked with scratches and deep gouges, as if a battle had taken place here long before. stale yet
+still liquid blood congeals underfoot. to the west is a small room that perhaps once housed a guard, and to the north you see some makeshift
+fortifications as if against some threat further inside. back east lays the door to the main hall.
 
 ============================================================================================================================================''',
             },
-            'Vault of the Once-Whole - Gaolers Quarters' : {
-                  'east' : 'Vault of the Once-Whole - Foyer',
-                  'north' : 'Vault of the Once-Whole - Gaol',
-                  'enemy' : 'Chained Forlorn',
-                  'enemy' : 'Blood-Fettered Veteran',
-                  'item'  : 'Elixir of Flesh',
+            'vault of the once-whole - gaolers quarters' : {
+                  'east' : 'vault of the once-whole - foyer',
+                  'north' : 'vault of the once-whole - gaol',
+                  'enemy' : 'chained forlorn',
+                  'enemy' : 'blood-fettered veteran',
+                  'item'  : 'elixir of flesh',
                   'desc'  : '''
 ============================================================================================================================================
-The small guardsman's room must have once been the quarters of a gaoler, with a heavyset barred door to the north. Discarded, rusted chains
-litter the floor and it looks as if something has broken out of them. Away from this, east leads back to the foyer.
+the small guardsman's room must have once been the quarters of a gaoler, with a heavyset barred door to the north. discarded, rusted chains
+litter the floor and it looks as if something has broken out of them. away from this, east leads back to the foyer.
 
 ============================================================================================================================================''',
             },
-            'Vault of the Once-Whole - Stockade' : {
-                  'west' : 'Vault of the Once-Whole - Gaol',
-                  'south' : 'Vault of the Once-Whole - Foyer',
-                  'enemy' : 'Chained Forlorn',
-                  'enemy' : 'Blood-Fettered Veteran',
-                  'item'  : 'Elixir of Soul',
+            'vault of the once-whole - stockade' : {
+                  'west' : 'vault of the once-whole - gaol',
+                  'south' : 'vault of the once-whole - foyer',
+                  'enemy' : 'chained forlorn',
+                  'enemy' : 'blood-fettered veteran',
+                  'item'  : 'elixir of soul',
                   'desc'  : '''
 ============================================================================================================================================
-The walls surrounding the stockade are similarly slashed and gouged to the foyer to the south, and the congealing blood is spattered across 
-the thick planks that were once used to block something in. There is, however, a way forward to the west.
+the walls surrounding the stockade are similarly slashed and gouged to the foyer to the south, and the congealing blood is spattered across 
+the thick planks that were once used to block something in. there is, however, a way forward to the west.
 
 ============================================================================================================================================''',
             },
-            'Vault of the Once-Whole - Gaol' : {
-                  'south' : 'Vault of the Once-Whole - Gaolers Quarters',
-                  'east' : 'Vault of the Once-Whole - Stockade',
-                  'boss' : 'Ser Ulthric, Burdened of Names',
+            'vault of the once-whole - gaol' : {
+                  'south' : 'vault of the once-whole - gaolers quarters',
+                  'east' : 'vault of the once-whole - stockade',
+                  'boss' : 'ser ulthric, burdened of names',
                   'desc'  : '''
 ============================================================================================================================================
-The gaol of an ancient soldier is littered with corpses of would-be adventurers that came before you, their skulls wrenched from their 
+the gaol of an ancient soldier is littered with corpses of would-be adventurers that came before you, their skulls wrenched from their 
 shoulders and scattered amongst the broken chains and old weapons.
 
 ============================================================================================================================================''',
             },
-            'The Silent Threshold' : {
-                  'south' : 'Hall of the Unnumbered Trials - North',
+            'the silent threshold' : {
+                  'south' : 'hall of the unnumbered trials - north',
                   'desc'  : '''
 ============================================================================================================================================
-You are alone in a vast, echoic chamber. The air is still, and yet you feel the eyes of previous adventurers upon you. In the centre of the 
-room, there stands a lone door - a grand, imposing structure. There is no way to open it, but there seems to be a cavity inside - like a 
-mortise. Something surely fits in here.
+you are alone in a vast, echoic chamber. the air is still, and yet you feel the eyes of previous adventurers upon you. in the centre of the 
+room, there stands a lone door - a grand, imposing structure. there is no way to open it, but there seems to be a cavity inside - like a 
+mortise. something surely fits in here.
 
 ============================================================================================================================================''',
             },
-            'The Atrium of Unmaking' : {
-                  'south' : 'The Silent Threshold',
-                  'boss' : 'The Child Beyond Time',
+            'the atrium of unmaking' : {
+                  'south' : 'the silent threshold',
+                  'boss' : 'the child beyond time',
                   'desc'  : '''
 ============================================================================================================================================
 
 ============================================================================================================================================''',
             },
          }
-#HP remnant 2
+#hp remnant 2
 enemies = {
-            'Feral Remnant' : {
-                  'enemyHP' : 2,
-                  'enemyATK'  : 3,
+            'feral remnant' : {
+                  'enemyhp' : 2,
+                  'enemyatk'  : 1,
                 },
-            'Whispering Mistborn' : {
-                  'enemyHP' : 4,
-                  'enemyATK'  : 2,
+            'whispering mistborn' : {
+                  'enemyhp' : 4,
+                  'enemyatk'  : 1,
                 },
-            'Fallen Adventurer' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 4,
+            'fallen adventurer' : {
+                  'enemyhp' : 5,
+                  'enemyatk'  : 3,
                 },
-            'Chained Forlorn' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 3,
+            'chained forlorn' : {
+                  'enemyhp' : 5,
+                  'enemyatk'  : 3,
                 },
-            'Blood-Fettered Veteran' : {
-                  'enemyHP' : 4,
-                  'enemyATK'  : 6,
+            'blood-fettered veteran' : {
+                  'enemyhp' : 4,
+                  'enemyatk'  : 3,
                 },
-            'Lamenting Vestal' : {
-                  'enemyHP' : 3,
-                  'enemyATK'  : 5,
+            'lamenting vestal' : {
+                  'enemyhp' : 3,
+                  'enemyatk'  : 4,
                 },
-            'Votary of Many Tongues' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 3,
+            'votary of many tongues' : {
+                  'enemyhp' : 5,
+                  'enemyatk'  : 3,
                 },
-            'Grasp of Many' : {
-                  'enemyHP' : 8,
-                  'enemyATK'  : 2,
+            'grasp of many' : {
+                  'enemyhp' : 8,
+                  'enemyatk'  : 2,
                 },
-            'Half-Born Remnant' : {
-                  'enemyHP' : 2,
-                  'enemyATK'  : 3,
+            'half-born remnant' : {
+                  'enemyhp' : 2,
+                  'enemyatk'  : 3,
                 },
-            'Husk of Knowing' : {
-                  'enemyHP' : 3,
-                  'enemyATK'  : 2,
+            'husk of knowing' : {
+                  'enemyhp' : 3,
+                  'enemyatk'  : 2,
                 },
-            'Vessel of Errant Insight' : {
-                  'enemyHP' : 5,
-                  'enemyATK'  : 4,
+            'vessel of errant insight' : {
+                  'enemyhp' : 5,
+                  'enemyatk'  : 4,
                 },
 }
 
 bosses = {
-            'The Maw of Gentle Regret' : {
-                  'enemyHP' : 30,
-                  'enemyATK'  : 2,
-                  'bosskey'  : 'Tenon of Many Ends',
+            'the maw of gentle regret' : {
+                  'enemyhp' : 30,
+                  'enemyatk'  : 2,
+                  'bosskey'  : 'tenon of many ends',
                   'bossdesc' : '''
-Stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
-It wears their armor, their limbs, their hopes - all rotting beneath the weight of shared failure.
-So many came seeking purpose. Together, they found something worse.
+stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
+it wears their armor, their limbs, their hopes - all rotting beneath the weight of shared failure.
+so many came seeking purpose. together, they found something worse.
 
-All who enter are remembered. None as themselves. Purpose decays. But hunger persists.''',
-                  'bosskeydesc' : 'Knotted bone and glimmering ash. It does not fit cleanly into any shape- but somehow, it belongs.',
+all who enter are remembered. none as themselves. purpose decays. but hunger persists.''',
+                  'bosskeydesc' : 'knotted bone and glimmering ash. it does not fit cleanly into any shape- but somehow, it belongs.',
                 },
-            'Lady Vestige, the Bound Echo' : {
-                  'enemyHP' : 30,
-                  'enemyATK'  : 3,
-                  'bosskey'  : 'Tenon of Unspoken Shapes',
+            'lady vestige, the bound echo' : {
+                  'enemyhp' : 30,
+                  'enemyatk'  : 3,
+                  'bosskey'  : 'tenon of unspoken shapes',
                   'bossdesc' : '''
-Once a seeker of escape through knowledge, she unmade herself word by word.
-Now bound in thought and thin as parchment, she whispers truths no mind should carry.
-She read until there was no more ‘she’ left to read.
+once a seeker of escape through knowledge, she unmade herself word by word.
+now bound in thought and thin as parchment, she whispers truths no mind should carry.
+she read until there was no more ‘she’ left to read.
 
-She sought the way out, and became the door. In knowing everything, she forgot what she was.''',
-                  'bosskeydesc' : 'Carved with symbols that shift when not observed. Cold to the touch, yet burns with withheld meaning.',
+she sought the way out, and became the door. in knowing everything, she forgot what she was.''',
+                  'bosskeydesc' : 'carved with symbols that shift when not observed. cold to the touch, yet burns with withheld meaning.',
                 },
-            'The Choir of One' : {
-                  'enemyHP' : 35,
-                  'enemyATK'  : 5,
-                  'bosskey'  : 'Tenon of Hollow Praise',
+            'the choir of one' : {
+                  'enemyhp' : 35,
+                  'enemyatk'  : 5,
+                  'bosskey'  : 'tenon of hollow praise',
                   'bossdesc' : '''
-A broken cleric who sang to silence until silence sang back.
-Now a choir of mouths and madness, it praises a god that answers only in echoes.
-There were no others to join the hymn. So, it made them.
+a broken cleric who sang to silence until silence sang back.
+now a choir of mouths and madness, it praises a god that answers only in echoes.
+there were no others to join the hymn. so, it made them.
 
-Sing loud enough, and the silence will sing back.''',
-                  'bosskeydesc' : 'Pale and resonant, it hums faintly with voices not your own. Some still believe it is listening.',
+sing loud enough, and the silence will sing back.''',
+                  'bosskeydesc' : 'pale and resonant, it hums faintly with voices not your own. some still believe it is listening.',
                 },
-            'Ser Ulthric, Burdened of Names' : {
-                  'enemyHP' : 35,
-                  'enemyATK'  : 5,
-                  'bosskey'  : 'Tenon of Broken Oaths',
+            'ser ulthric, burdened of names' : {
+                  'enemyhp' : 35,
+                  'enemyatk'  : 5,
+                  'bosskey'  : 'tenon of broken oaths',
                   'bossdesc' : '''
-Once a proud champion entombed by his own honours, Ulthric was left to rot in chains he forged with valour.
-Now, a beast of instinct, he swings in defiance of a past no longer his.
-They built walls to keep him safe. Or was it to keep him in?
+once a proud champion entombed by his own honours, ulthric was left to rot in chains he forged with valour.
+now, a beast of instinct, he swings in defiance of a past no longer his.
+they built walls to keep him safe. or was it to keep him in?
 
-Chains may break. But the burden remains. He remembers only the oath. Not who he swore it to.''',
-                  'bosskeydesc' : 'A heavy shard of forged steel, stained and splintered. It bears the weight of forgotten vows.',
+chains may break. but the burden remains. he remembers only the oath. not who he swore it to.''',
+                  'bosskeydesc' : 'a heavy shard of forged steel, stained and splintered. it bears the weight of forgotten vows.',
                 },
-            'The Child Beyond Time' : {
-                  'enemyHP' : 50,
-                  'enemyATK'  : 6,
+            'the child beyond time' : {
+                  'enemyhp' : 50,
+                  'enemyatk'  : 6,
                   'bossdesc'  :'''
-The lock turns not with a key, but with surrender. You are not the first. You were simply next.
+the lock turns not with a key, but with surrender. you are not the first. you were simply next.
 
-You step forward into nothing- a formless, infinite void that swallows all sound, all light, all meaning.
+you step forward into nothing- a formless, infinite void that swallows all sound, all light, all meaning.
 
-There is no floor, yet you do not fall.
-There are no walls, yet something watches.
+there is no floor, yet you do not fall.
+there are no walls, yet something watches.
 
-The air shimmers faintly with the echo of voices you don’t remember having,
+the air shimmers faintly with the echo of voices you don’t remember having,
 names you’ve almost spoken, and faces you’ve almost known.
 
-Far ahead, a figure stands- not tall, not grand, but small.
-A silhouette of something childlike, flickering between shapes like a stuttering memory.
-One moment draped in rags, the next in ruined armour, then nothing at all.
-It doesn’t look at you—but you know it knows you’re here.
+far ahead, a figure stands- not tall, not grand, but small.
+a silhouette of something childlike, flickering between shapes like a stuttering memory.
+one moment draped in rags, the next in ruined armour, then nothing at all.
+it doesn’t look at you—but you know it knows you’re here.
 
-Fragments of past rooms briefly coalesce in the distance-
+fragments of past rooms briefly coalesce in the distance-
 a broken chain, a plaster face, a discarded helm, a singed page
 and are gone again.
 
-This is the place the maze was built to hide.
+this is the place the maze was built to hide.
 
-This is where it ends.
-Or begins.
+this is where it ends.
+or begins.
 '''
                 },
 }
 
 weapons = {
-            'Broken Sword' : {
+            'broken sword' : {
                   'weapondamage' : 2,
                 },
-            'Rusted Axe' : {
+            'rusted axe' : {
                   'weapondamage' : 3,
                 },
-            'Steel Greatsword' : {
+            'steel greatsword' : {
                   'weapondamage' : 4,
                 },
-            'Heavy Mace' : {
+            'heavy mace' : {
                   'weapondamage' : 5,
                 },
-            'Steel Warhammer' : {
+            'steel warhammer' : {
                   'weapondamage' : 6,
                 },
 }
 
 finalbosstext = {
-            1 : '''"You have come far. Or rather, you have come again."''',
-            2 : '''"You were always meant to arrive. That is why they were chosen. Do you recognize them? No… you wouldn’t yet.”''',
-            3 : '''“We’ve done this before. We’ll do it again. One of us must be free.”''',
+            1 : '''"you have come far. or rather, you have come again."''',
+            2 : '''"you were always meant to arrive. that is why they were chosen. do you recognize them? no… you wouldn’t yet.”''',
+            3 : '''“we’ve done this before. we’ll do it again. one of us must be free.”''',
 }
 #spawn area is cave cell; change to wherever you need to go for debugging :)))
-currentRoom = 'Cave Cell'
+currentroom = 'cave cell'
 
-showInstructions()
+showinstructions()
 
 #loop forever
 while True:
-  playerATK = (playerSTR * weapondamage) + playerLCK
-  showStatus()
+  playeratk = (playerstr * weapondamage) + playerlck
+  showstatus()
 
   #get the player's next 'action' as a list array (verb, noun)
   action = ''
@@ -709,36 +718,36 @@ while True:
   #if they type 'go' first
   if action[0] == 'go':
     #check that they are allowed wherever they want to go
-    if action[1] in rooms[currentRoom]:
+    if action[1] in rooms[currentroom]:
       #set the current room to the new room
-      currentRoom = rooms[currentRoom][action[1]]
+      currentroom = rooms[currentroom][action[1]]
     #there is no door (link) to the new room
     else:
-        print('You can\'t go that way!')
+        print('you can\'t go that way!')
 
   #if they type 'get' first
   if action[0] == 'get' :
-    if "item" in rooms[currentRoom] and action[1] in rooms[currentRoom]['item']:
+    if "item" in rooms[currentroom] and action[1] in rooms[currentroom]['item']:
       inventory.append(action[1])
       print(action[1] + ' acquired.')
-      del rooms[currentRoom]['item']
+      del rooms[currentroom]['item']
     else:
-      print('Can\'t get ' + action[1] + '!')
+      print('can\'t get ' + action[1] + '!')
 
 
   #to use an item
   if action[0] == 'use' :
-    if "item" in rooms[currentRoom] and action[1] in rooms[currentRoom]['item']:
+    if "item" in rooms[currentroom] and action[1] in rooms[currentroom]['item']:
       print(action[1] + ' must be picked up first!')
-    elif action[1] in inventory and action[1] == 'Elixir of Soul':
-      maxHP += 2
-      playerHP = maxHP
-      print("You feel sturdier! Max HP increased.")
-      inventory.remove('Elixir of Soul')
-    elif action[1] in inventory and action[1] == 'Elixir of Flesh':
-      playerSTR += 1
-      print("You feel stronger! Strength increased.")
-      inventory.remove('Elixir of Flesh')
+    elif action[1] in inventory and action[1] == 'elixir of soul':
+      maxhp += 2
+      playerhp = maxhp
+      print("you feel sturdier! max hp increased.")
+      inventory.remove('elixir of soul')
+    elif action[1] in inventory and action[1] == 'elixir of flesh':
+      playerstr += 1
+      print("you feel stronger! strength increased.")
+      inventory.remove('elixir of flesh')
     elif action[1] in weapons and action[1] in inventory:
       inventory.append(equipment[0])
       equipment.clear()
@@ -746,16 +755,16 @@ while True:
       inventory.remove(action[1])
       weapondamage = weapons[action[1]]['weapondamage']
     else:
-      print('Can\'t use ' + action[1] + '!')
+      print('can\'t use ' + action[1] + '!')
       
   #show map
   if action[0] == 'map' :
     print('''
           
-MAP:
+map:
                □
                |
-     □ __ □    □    □ __ □             X = Start
+     □ __ □    □    □ __ □             x = start
      |    |    |    |    |
      □ __ □ __ □ __ □ __ □
                |   
@@ -763,7 +772,7 @@ MAP:
           |    |    |    |
      □ __ □    □    □ __ □
      |         |
-X    □ __ □ __ □ __ □
+x    □ __ □ __ □ __ □
 |    |    |    |    |
 □ __ □    □ __ □ __ □   
 |    |
@@ -775,26 +784,26 @@ X    □ __ □ __ □ __ □
 
   #attacking a normal enemy
   if action[0] == 'attack' :
-      if "enemy" in rooms[currentRoom] and action[1] in rooms[currentRoom]['enemy']:
-          print(action[1] + ' has '+ str(enemies[action[1]]['enemyHP']) +' HP and ' + str(enemies[action[1]]['enemyATK']) + ' attack.')
-          if playerLCK == 0:
+      if "enemy" in rooms[currentroom] and action[1] in rooms[currentroom]['enemy']:
+          print(action[1] + ' has '+ str(enemies[action[1]]['enemyhp']) +' hp and ' + str(enemies[action[1]]['enemyatk']) + ' attack.')
+          if playerlck == 0:
               hitchance = random.randint(0,3)
               enemyhitchance = random.randint(0,4)
-          elif playerLCK == 2:
+          elif playerlck == 2:
               hitchance = random.randint(0,5)
               enemyhitchance = random.randint(0,3)
-          elif playerLCK >= 5:
+          elif playerlck >= 5:
               hitchance = random.randint(0,10)
               enemyhitchance = random.randint(0,2)
 
-          if enemies[action[1]]['enemyHP'] <= playerATK:
+          if enemies[action[1]]['enemyhp'] <= playeratk:
               print(action[1] + ' defeated!')
-              del rooms[currentRoom]['enemy']
-              playerHP -= enemies[action[1]]['enemyATK'] 
-              playerHP -= enemyhitchance
-              maxHP += 1
-              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
-          if playerHP <= 0:
+              del rooms[currentroom]['enemy']
+              playerhp -= enemies[action[1]]['enemyatk'] 
+              playerhp -= enemyhitchance
+              maxhp += 1
+              print('health decreased by ' + str(enemies[action[1]]['enemyatk']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
+          if playerhp <= 0:
               print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -809,14 +818,14 @@ X    □ __ □ __ □ __ □
                                                                                                     
                         ''')
               break
-          elif enemies[action[1]]['enemyHP'] > playerATK:
-              enemies[action[1]]['enemyHP'] -= playerATK
-              enemies[action[1]]['enemyHP'] -= hitchance
-              print(action[1] + ' health decreased by ' + str(playerATK))
-              playerHP -= enemies[action[1]]['enemyATK']
-              playerHP -= enemyhitchance
-              print('Health decreased by ' + str(enemies[action[1]]['enemyATK']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
-              if playerHP <= 0:
+          elif enemies[action[1]]['enemyhp'] > playeratk:
+              enemies[action[1]]['enemyhp'] -= playeratk
+              enemies[action[1]]['enemyhp'] -= hitchance
+              print(action[1] + ' health decreased by ' + str(playeratk))
+              playerhp -= enemies[action[1]]['enemyatk']
+              playerhp -= enemyhitchance
+              print('health decreased by ' + str(enemies[action[1]]['enemyatk']) + ' with ' + str(enemyhitchance) + ' bonus damage!')
+              if playerhp <= 0:
                   print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -831,7 +840,7 @@ X    □ __ □ __ □ __ □
                                                                                                     
                         ''')
                   break
-      elif playerHP <= 0:
+      elif playerhp <= 0:
           print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -851,31 +860,31 @@ X    □ __ □ __ □ __ □
 
 
 #attacking a boss that is not final boss
-      elif "boss" in rooms[currentRoom] and action[1] in rooms[currentRoom]['boss'] and rooms[currentRoom]['boss'] != "The Child Beyond Time":
-          print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
-          if playerLCK == 0:
+      elif "boss" in rooms[currentroom] and action[1] in rooms[currentroom]['boss'] and rooms[currentroom]['boss'] != "the child beyond time":
+          print(action[1] + ' has '+ str(bosses[action[1]]['enemyhp']) +' hp and ' + str(bosses[action[1]]['enemyatk']) + ' attack.')
+          if playerlck == 0:
               hitchance = random.randint(0,3)
               enemyhitchance = random.randint(0,4)
-          elif playerLCK == 2:
+          elif playerlck == 2:
               hitchance = random.randint(0,5)
               enemyhitchance = random.randint(0,3)
-          elif playerLCK >= 5:
+          elif playerlck >= 5:
               hitchance = random.randint(0,10)
               enemyhitchance = random.randint(0,2)
-          if bosses[action[1]]['enemyHP'] <= playerATK:
+          if bosses[action[1]]['enemyhp'] <= playeratk:
               print(action[1] + ' defeated!')
-              del rooms[currentRoom]['boss']
+              del rooms[currentroom]['boss']
               inventory.append(bosses[action[1]]['bosskey'])
               print(bosses[action[1]]['bosskey'] + ' added to inventory!')
               print(bosses[action[1]]['bosskeydesc'])
-              playerHP -= bosses[action[1]]['enemyATK']
-              playerHP -= enemyhitchance
-              playerSTR += 1
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-          if bosses[action[1]]['enemyHP'] == 0:
+              playerhp -= bosses[action[1]]['enemyatk']
+              playerhp -= enemyhitchance
+              playerstr += 1
+              print('health decreased by ' + str(bosses[action[1]]['enemyatk']) + '!')
+          if bosses[action[1]]['enemyhp'] == 0:
               inventory.append(bosses[action[1]]['bosskey'])
               print(bosses[action[1]]['bosskeydesc'])
-              if playerHP <= 0:
+              if playerhp <= 0:
                   print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -890,15 +899,15 @@ X    □ __ □ __ □ __ □
                                                                                                     
                         ''')
                   break
-              del rooms[currentRoom]['boss']
-          elif bosses[action[1]]['enemyHP'] > playerATK:
-              bosses[action[1]]['enemyHP'] -= playerATK
-              bosses[action[1]]['enemyHP'] -= hitchance
-              print(action[1] + ' health decreased by ' + str(playerATK))
-              playerHP -= bosses[action[1]]['enemyATK']
-              playerHP -= enemyhitchance
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
-              if playerHP <= 0:
+              del rooms[currentroom]['boss']
+          elif bosses[action[1]]['enemyhp'] > playeratk:
+              bosses[action[1]]['enemyhp'] -= playeratk
+              bosses[action[1]]['enemyhp'] -= hitchance
+              print(action[1] + ' health decreased by ' + str(playeratk))
+              playerhp -= bosses[action[1]]['enemyatk']
+              playerhp -= enemyhitchance
+              print('health decreased by ' + str(bosses[action[1]]['enemyatk'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
+              if playerhp <= 0:
                   print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -916,15 +925,15 @@ X    □ __ □ __ □ __ □
 
 
 #attacking final boss
-      elif rooms[currentRoom]["boss"] == "The Child Beyond Time":
-          print(action[1] + ' has '+ str(bosses[action[1]]['enemyHP']) +' HP and ' + str(bosses[action[1]]['enemyATK']) + ' attack.')
-          if playerLCK == 0:
+      elif rooms[currentroom]["boss"] == "the child beyond time":
+          print(action[1] + ' has '+ str(bosses[action[1]]['enemyhp']) +' hp and ' + str(bosses[action[1]]['enemyatk']) + ' attack.')
+          if playerlck == 0:
               hitchance = random.randint(0,3)
               enemyhitchance = random.randint(0,4)
-          elif playerLCK == 2:
+          elif playerlck == 2:
               hitchance = random.randint(0,5)
               enemyhitchance = random.randint(0,3)
-          elif playerLCK >= 5:
+          elif playerlck >= 5:
               hitchance = random.randint(0,10)
               enemyhitchance = random.randint(0,2)
           if finalbossturn == 1:
@@ -935,19 +944,19 @@ X    □ __ □ __ □ __ □
             print(finalbosstext[3])
           if finalbossturn >= 4:
             print("")
-          if bosses[action[1]]['enemyHP'] <= playerATK:
+          if bosses[action[1]]['enemyhp'] <= playeratk:
               print(action[1] + ''' has been defeated... for now.
-A voice whispers in the darkness:
+a voice whispers in the darkness:
                     
-“You’ll need new guards.”
+“you’ll need new guards.”
                     
-“Find others. From other whens. Make them strong.”
+“find others. from other whens. make them strong.”
                     
-“Soon... you’ll forget this was you.”
+“soon... you’ll forget this was you.”
                     ''')
-              playerHP -= bosses[action[1]]['enemyATK']
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK']) + '!')
-              if playerHP <= 0:
+              playerhp -= bosses[action[1]]['enemyatk']
+              print('health decreased by ' + str(bosses[action[1]]['enemyatk']) + '!')
+              if playerhp <= 0:
                   print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -961,17 +970,18 @@ A voice whispers in the darkness:
                           █           █                                                             
                                                                                                     
                         ''')
+                  
                   break
-              del rooms[currentRoom]['boss']
-          elif bosses[action[1]]['enemyHP'] > playerATK:
-              bosses[action[1]]['enemyHP'] -= playerATK
-              bosses[action[1]]['enemyHP'] -= hitchance
-              print(action[1] + ' health decreased by ' + str(playerATK))
-              playerHP -= bosses[action[1]]['enemyATK']
-              playerHP -= enemyhitchance
-              print('Health decreased by ' + str(bosses[action[1]]['enemyATK'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
+              del rooms[currentroom]['boss']
+          elif bosses[action[1]]['enemyhp'] > playeratk:
+              bosses[action[1]]['enemyhp'] -= playeratk
+              bosses[action[1]]['enemyhp'] -= hitchance
+              print(action[1] + ' health decreased by ' + str(playeratk))
+              playerhp -= bosses[action[1]]['enemyatk']
+              playerhp -= enemyhitchance
+              print('health decreased by ' + str(bosses[action[1]]['enemyatk'])  + ' with ' + str(enemyhitchance) + ' bonus damage!')
               finalbossturn += 1
-              if playerHP <= 0:
+              if playerhp <= 0:
                   print('''
                         
             ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
@@ -989,16 +999,16 @@ A voice whispers in the darkness:
 
 
       else:
-        print('Can\'t do ' + action[1] + '!')
+        print('can\'t do ' + action[1] + '!')
 
   #if a player has defeated all four bosses, going to the silent threshold with all the keys will send them into final boss room
-  if currentRoom == 'The Silent Threshold' and 'Tenon of Many Ends' in inventory and 'Tenon of Unspoken Shapes' in inventory and 'Tenon of Hollow Praise' in inventory and 'Tenon of Broken Oaths' in inventory:
+  if currentroom == 'the silent threshold' and 'tenon of many ends' in inventory and 'tenon of unspoken shapes' in inventory and 'tenon of hollow praise' in inventory and 'tenon of broken oaths' in inventory:
     print('''
   ============================================================================================================================================
-The tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
-the mortise. The door opens slowly without a sound, and your breath catches in your throat as you step through.
+the tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
+the mortise. the door opens slowly without a sound, and your breath catches in your throat as you step through.
 ============================================================================================================================================''')
-    currentRoom = 'The Atrium of Unmaking'
-    showStatus()
+    currentroom = 'the atrium of unmaking'
+    showstatus()
 
 
