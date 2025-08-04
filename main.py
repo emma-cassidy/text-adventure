@@ -70,7 +70,7 @@ select your starting character:
     ''')
       while True:
         char_class = input("choose your class. enter cleric, warrior or rogue: ").lower().strip()
-        if char_class in ["cleric", "warrior", "rogue", "altmer",]:
+        if char_class in ["cleric", "warrior", "rogue", "altmer",]: #random test class at the end
             break
         else:
             print("please choose a valid class.")
