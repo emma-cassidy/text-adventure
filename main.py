@@ -1,10 +1,18 @@
 #my baby rpg lol
 
+import logging
 import time
 import random
 import pygame
 import ctypes
+from rich.console import Console
 from os import path
+import sys
+import datetime
+console = Console()
+
+
+logging.basicConfig(filename="FALSE-SOULS-CRASH.txt", encoding='utf-8', level=logging.DEBUG)
 
 ctypes.windll.kernel32.SetConsoleTitleW("False Souls")
 
@@ -72,7 +80,9 @@ select your starting character:
           time.sleep(3)
           print("restarting...")
           time.sleep(2)
+          pygame.mixer.stop()
           script()
+
 
       if char_class == "cleric":
         playerhp = 15
@@ -106,9 +116,9 @@ commands:
   go [direction]       (north, south, east, west)
   get [item]           (item name)
   use [item]           (item name)
-  map                  (shows map)
+  show map             (shows map)
   attack [enemy]       (initiates combat)
-  commands             (show commands)
+  show commands        (show commands)
 
   defeating enemies increases your maximum hp!
   defeating bosses increases your maximum strength!
@@ -135,11 +145,14 @@ commands:
         if "enemy" in rooms[currentroom]:
             print('there is a \"' + rooms[currentroom]['enemy'] + '\" enemy in here!')
         if "boss" in rooms[currentroom]:
-            print('the boss \"' + rooms[currentroom]['boss'] + '\" prepares to attack!')
-            placeholder = rooms[currentroom]['boss']
-            if bosses[placeholder]['enemyhp'] >= 30:
-                print((bosses[placeholder]['bossdesc']))
-                # del bosses[placeholder]['bossdesc']
+            if "boss" in rooms[currentroom] and action[0] == "attack" and len(action) < 2:
+               print("what are you attacking?")
+            else:
+                console.print('[bold]the boss \"' + rooms[currentroom]['boss'] + '\" prepares to attack![/bold]')
+                placeholder = rooms[currentroom]['boss']
+                if bosses[placeholder]['enemyhp'] >= 45:
+                    console.print((bosses[placeholder]['bossdesc']))
+                    # del bosses[placeholder]['bossdesc']
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
     def credits():
@@ -156,9 +169,12 @@ commands:
 
         With thanks to soulBit for his
          guidance, feedback and advice
+              
+          Thanks for Ashplaze for
+         his excellent bug finding
                
-        Thanks to pulchritudedude for his
-            support and playtesting
+       Thanks to pulchritudedude for his
+           support and playtesting
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ''')
 
@@ -551,102 +567,102 @@ mortise. something surely fits in here.
     #hp remnant 2
     enemies = {
                 'feral remnant' : {
-                      'enemyhp' : 2,
+                      'enemyhp' : 3,
                       'enemyatk'  : 1,
                     },
                 'whispering mistborn' : {
-                      'enemyhp' : 4,
+                      'enemyhp' : 5,
                       'enemyatk'  : 1,
                     },
                 'fallen adventurer' : {
-                      'enemyhp' : 5,
+                      'enemyhp' : 7,
                       'enemyatk'  : 3,
                     },
                 'chained forlorn' : {
-                      'enemyhp' : 5,
+                      'enemyhp' : 7,
                       'enemyatk'  : 3,
                     },
                 'blood-fettered veteran' : {
-                      'enemyhp' : 4,
+                      'enemyhp' : 6,
                       'enemyatk'  : 3,
                     },
                 'lamenting vestal' : {
-                      'enemyhp' : 3,
+                      'enemyhp' : 5,
                       'enemyatk'  : 4,
                     },
                 'votary of many tongues' : {
-                      'enemyhp' : 5,
+                      'enemyhp' : 7,
                       'enemyatk'  : 3,
                     },
                 'grasp of many' : {
-                      'enemyhp' : 8,
+                      'enemyhp' : 10,
                       'enemyatk'  : 2,
                     },
                 'half-born remnant' : {
-                      'enemyhp' : 2,
+                      'enemyhp' : 4,
                       'enemyatk'  : 3,
                     },
                 'husk of knowing' : {
-                      'enemyhp' : 3,
+                      'enemyhp' : 5,
                       'enemyatk'  : 2,
                     },
                 'vessel of errant insight' : {
-                      'enemyhp' : 5,
+                      'enemyhp' : 7,
                       'enemyatk'  : 4,
                     },
     }
 
     bosses = {
                 'the maw of gentle regret' : {
-                      'enemyhp' : 30,
+                      'enemyhp' : 45,
                       'enemyatk'  : 3,
                       'bosskey'  : 'tenon of many ends',
-                      'bossdesc' : '''
+                      'bossdesc' : '''[italic]
 stitched from ambition and error, this slithering mockery of heroism hungers for meaning.
 it wears their armor, their limbs, their hopes - all rotting beneath the weight of shared failure.
 so many came seeking purpose. together, they found something worse.
 
-all who enter are remembered. none as themselves. purpose decays. but hunger persists.''',
+all who enter are remembered. none as themselves. purpose decays. but hunger persists.[/italic]''',
                       'bosskeydesc' : 'knotted bone and glimmering ash. it does not fit cleanly into any shape- but somehow, it belongs.',
                     },
                 'lady vestige, the bound echo' : {
-                      'enemyhp' : 30,
+                      'enemyhp' : 45,
                       'enemyatk'  : 4,
                       'bosskey'  : 'tenon of unspoken shapes',
-                      'bossdesc' : '''
+                      'bossdesc' : '''[italic]
 once a seeker of escape through knowledge, she unmade herself word by word.
 now bound in thought and thin as parchment, she whispers truths no mind should carry.
 she read until there was no more ‘she’ left to read.
 
-she sought the way out, and became the door. in knowing everything, she forgot what she was.''',
+she sought the way out, and became the door. in knowing everything, she forgot what she was.[/italic]''',
                       'bosskeydesc' : 'carved with symbols that shift when not observed. cold to the touch, yet burns with withheld meaning.',
                     },
                 'the choir of one' : {
-                      'enemyhp' : 35,
-                      'enemyatk'  : 5,
+                      'enemyhp' : 50,
+                      'enemyatk'  : 4,
                       'bosskey'  : 'tenon of hollow praise',
-                      'bossdesc' : '''
+                      'bossdesc' : '''[italic]
 a broken cleric who sang to silence until silence sang back.
 now a choir of mouths and madness, it praises a god that answers only in echoes.
 there were no others to join the hymn. so, it made them.
 
-sing loud enough, and the silence will sing back.''',
+sing loud enough, and the silence will sing back.[/italic]''',
                       'bosskeydesc' : 'pale and resonant, it hums faintly with voices not your own. some still believe it is listening.',
                     },
                 'ser ulthric, burdened of names' : {
-                      'enemyhp' : 35,
+                      'enemyhp' : 50,
                       'enemyatk'  : 5,
                       'bosskey'  : 'tenon of broken oaths',
-                      'bossdesc' : '''
+                      'bossdesc' : '''[italic]
 once a proud champion entombed by his own honours, ulthric was left to rot in chains he forged with valour.
 now, a beast of instinct, he swings in defiance of a past no longer his.
 they built walls to keep him safe. or was it to keep him in?
 
-chains may break. but the burden remains. he remembers only the oath. not who he swore it to.''',
+chains may break. but the burden remains. he remembers only the oath. not who he swore it to.[/italic]''',
                       'bosskeydesc' : 'a heavy shard of forged steel, stained and splintered. it bears the weight of forgotten vows.',
                     },
                 'the child beyond time' : {
-                      'enemyhp' : 50,
+                      'enemyhp' : 120,
                       'enemyatk'  : 6,
                       'bossdesc'  :'''
 the lock turns not with a key, but with surrender. you are not the first. you were simply next.
@@ -671,26 +687,26 @@ and are gone again.
 this is the place the maze was built to hide.
 
 this is where it ends.
-or begins.
+[bold]or begins.[/bold]
     '''
                     },
     }
 
     weapons = {
                 'broken sword' : {
-                      'weapondamage' : 2,
+                      'weapondamage' : 1,
                     },
                 'rusted axe' : {
-                      'weapondamage' : 3,
+                      'weapondamage' : 2,
                     },
                 'steel greatsword' : {
-                      'weapondamage' : 4,
+                      'weapondamage' : 3,
                     },
                 'heavy mace' : {
-                      'weapondamage' : 5,
+                      'weapondamage' : 4,
                     },
                 'steel warhammer' : {
-                      'weapondamage' : 6,
+                      'weapondamage' : 5,
                     },
     }
 
@@ -702,19 +718,51 @@ or begins.
     #spawn area is cave cell; change to wherever you need to go for debugging :)))
     currentroom = 'cave cell'
 
+    validactions = ['feral remnant','whispering mistborn','fallen adventurer','chained forlorn','blood-fettered veteran','lamenting vestal','votary of many tongues','grasp of many','half-born remnant','husk of knowing','vessel of errant insight','the maw of gentle regret','lady vestige, the bound echo','the choir of one','ser ulthric, burdened of names','the child beyond time','broken sword','rusted axe','steel greatsword','heavy mace','steel warhammer','north','south','east','west','map','commands','elixir of soul','elixir of flesh',]
     showinstructions()
 
     #loop forever
     while True:
       playeratk = (playerstr * weapondamage) + playerlck
       showstatus()
-
+      if playerhp <= 0:
+        print('''
+                            
+                ███   ██    █████    ████    ███      ████████     ████  ████████  ████████             
+                ███   █   ███   ███   ███    ██        ██    ███   ███   ███    ██  ██    ███           
+                 ███ ██  ███     ███  ██      █        ██     ███  ███   ███  █     ██     ██           
+                  ████   ███      ██  ██      █        ██     ███  ███   ███  █     ██     ███          
+                  ███    ██       ██  ██      █        ██     ███  ███   ██████     ██     ███          
+                  ██    ███      ██  ███     █        ██     ███  ███   ███  █     ██     ███          
+                  ██     ██     ██   ███    ██        ██     ██   ███   ███     █  ██    ███           
+                  ██      ███ ███     ███████         ███ ████    ███   ████████  ███  ████            
+                              █           █                                                             
+                                                                                                        
+                            ''')
+        restart = str(input("Would you like to restart? y or n:  "))
+        if restart == "y":
+            pygame.mixer.stop()
+            script()
+        else:
+            print("Farwell, be stronger next time")
+            time.sleep(2)
+            credits()
+            time.sleep(5)
+            pygame.mixer.stop()
+            quit()
+            break
       #get the player's next 'action' as a list array (verb, noun)
-      action = ''
-      while action == '':
-        action = input('>')       
+      action = input('>')       
       action = action.split(" ", 1)
-    
+
+      if len(action) < 2:
+          print("please enter a valid command, use \"show commands\" for help")
+          continue
+      
+      if validactions.count(action[1]) == 0:
+          print("please enter a valid command, use \"show commands\" for help")
+          continue
+          
       
       #if they type 'go' first
       if action[0] == 'go':
@@ -731,7 +779,7 @@ or begins.
             print('you can\'t go that way!')
 
       #if they type 'commands'
-      elif action[0] == "commands":
+      elif action[1] == "commands":
          showinstructions()
          
 
@@ -768,7 +816,7 @@ or begins.
           print('can\'t use ' + action[1] + '!')
           
       #show map
-      elif action[0] == 'map' :
+      elif action[1] == 'map' :
         print('''
               
 map:
@@ -793,7 +841,7 @@ x    □ __ □ __ □ __ □
 
 
       #attacking a normal enemy
-      elif action[0] == 'attack' :
+      elif action[0] == 'attack' and len(action) > 1:
           if "enemy" in rooms[currentroom] and action[1] in rooms[currentroom]['enemy']:
               print(action[1] + ' has '+ str(enemies[action[1]]['enemyhp']) +' hp and ' + str(enemies[action[1]]['enemyatk']) + ' attack.')
               if playerlck == 0:
@@ -829,12 +877,15 @@ x    □ __ □ __ □ __ □
                             ''')
                   restart = str(input("Would you like to restart? y or n:  "))
                   if restart == "y":
+                     pygame.mixer.stop()
                      script()
                   else:
                       print("Farwell, be stronger next time")
                       time.sleep(2)
                       credits()
                       time.sleep(5)
+                      pygame.mixer.stop()
+                      quit()
                       break
                   
               elif enemies[action[1]]['enemyhp'] > playeratk:
@@ -860,12 +911,15 @@ x    □ __ □ __ □ __ □
                             ''')
                       restart = str(input("Would you like to restart? y or n:  "))
                       if restart == "y":
+                        pygame.mixer.stop()
                         script()
                       else:
                         print("Farwell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
+                        pygame.mixer.stop()
+                        quit()
                         break
                       
           elif playerhp <= 0:
@@ -884,12 +938,15 @@ x    □ __ □ __ □ __ □
                             ''')
               restart = str(input("Would you like to restart? y or n:  "))
               if restart == "y":
+                  pygame.mixer.stop()
                   script()
               else:
                   print("Farwell, be stronger next time")
                   time.sleep(2)
                   credits()
                   time.sleep(5)
+                  pygame.mixer.stop()
+                  quit()
                   break
           
 
@@ -936,12 +993,15 @@ x    □ __ □ __ □ __ □
                             ''')
                       restart = str(input("Would you like to restart? y or n:  "))
                       if restart == "y":
+                          pygame.mixer.stop()
                           script()
                       else:
                         print("Farwell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
+                        pygame.mixer.stop()
+                        quit()
                         break
                   del rooms[currentroom]['boss']
               elif bosses[action[1]]['enemyhp'] > playeratk:
@@ -967,12 +1027,15 @@ x    □ __ □ __ □ __ □
                             ''')
                       restart = str(input("Would you like to restart? y or n:  "))
                       if restart == "y":
+                          pygame.mixer.stop()
                           script()
                       else:
                         print("Farwell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
+                        pygame.mixer.stop()
+                        quit()
                         break
 
 
@@ -997,7 +1060,7 @@ x    □ __ □ __ □ __ □
               if finalbossturn >= 4:
                 print("")
               if bosses[action[1]]['enemyhp'] <= playeratk:
-                  print(action[1] + ''' has been defeated... for now.
+                  console.print(action[1] + '''[italic] has been defeated... for now.
 a voice whispers in the darkness:
                 
 “you’ll need new guards.”
@@ -1005,9 +1068,116 @@ a voice whispers in the darkness:
 “find others. from other whens. make them strong.”
                 
 “soon... you’ll forget this was you.”
+                                
+
+                        [/italic]''')
+                  time.sleep(3)
+                  print('''
+                                                                 
+                                                            ███                                                                  
+                                              ████████  ██████████    ███████                                                    
+                                               ██      ███       ███   ██                                                        
+                                               ██     ███         ███  ██                                                        
+                                               ██████ ███          ██  ██████                                                    
+                                               ██     ███          ██  ██                                                        
+                                               ██      ███        ██   ██                                                        
+                                               ██       ████    ███    ███  ██                                                   
+                                              ████         ██████     ████████                                                   
+                                                                                                                                                                                                   
+                                                                                                                                 
+                                                      ██                                                                         
+  █████      ████      ██        ███      █████  ███████████   ████     ████ ████  ██████ ████     █████ ████████ ███████████    
+    ███      ██       ████       ████       ██  ██        ███   ██       ██   ██  ███   █  ███       ██   ███      ██      ████  
+     ███    ██        ████       ██████     ██ ██          ███  ██       ██   ██  ████     ███       ██   ███      ██        ███ 
+      ███  ██        ██  ██      ██  ████   ██ ██          ███  ██       ██   ██    ████   ████████████   ███████  ██        ███ 
+      ███  ██       ████████     ██    ███  ██ ███         ███  ██       ██   ██      ███  ███       ██   ███      ██        ███ 
+       █████        ██    ███    ██     ██████  ███       ███   ██       ██   ██       ███ ███       ██   ███      ██        ██  
+        ███        ██      ███   ██       ████   █████  ████     ██     ██    ██  ██   ██  ███      ███   ███   █  ███     ███   
+         █        ███      ████ ████        █      ███████████    ███████    ████ ██████   ███      ████  ███████ ██████████     
+                                                            █████████████                                                        
+                                                                  █████                                                          
                         ''')
-                  playerhp -= bosses[action[1]]['enemyatk']
-                  print('health decreased by ' + str(bosses[action[1]]['enemyatk']) + '!')
+                  time.sleep(3)
+                  print('''
+the child in time is silent. not slain, but emptied.
+its echoes scatter like dust across the void.
+
+you stand alone, yet not alone.
+the faces return; not as memory, but as design.
+each one, a guardian you once called friend.
+each one, drawn here by your hand
+                        
+                        ''')
+                  time.sleep(6)
+                  console.print('''[italic]The courtyard crackles with frost as Ulthric nudges your shoulder with his elbow.
+\"First one to lose a gauntlet buys the next round,\" he grins.
+Together, you gaze up at the castle—its spires hollow, its silence too loud.
+\"No one comes out,\" he says, tightening his helm. \"So we go in. You know I'll always protect you.\"
+You nod. You always nodded when he looked that sure.
+You don’t see him look back at you, just once, before the gates open.[/italic]
+                                
+                                ''')
+                  time.sleep(8)
+                  console.print('''[italic]You sit beside Countess Isolde beneath the dim light of enchanted lanterns, books piled high.
+Her hand lingers over yours. \"You read that one backwards,\" she teases softly.
+A scroll glows faintly near her desk, sealed in three kinds of wax.
+\"Promise me you won’t try it,\" she whispers. \"No one knows what it does.\"
+She leans in, lips brushing your ear.
+\"And I’d rather not lose you to another riddle.\"[/italic]
+                                
+                                ''')
+                  time.sleep(8)
+                  console.print('''[italic]The undercroft smells of incense and dust. You shiver as he offers you a seat.
+\"There are things that follow, even between dreams,\" he murmurs. \"You’re not mad.\"
+He draws a sigil on the stone floor with chalk, steady and slow.
+\"It won’t stop it, but it will forget you - for now.\"
+You say you'll never forget him. He only smiles.
+\"Good,\" he says. \"Then I won’t be alone.\"[/italic]
+                                
+                                ''')
+                  time.sleep(8)
+                  console.print('''[italic]You all patiently wait in the dining room of the grand castle, waiting for the sign.
+Someone makes a joke about cursed bricks. Everyone laughs, even you.
+One of your compatriots grips your elbow. \"When we’re done, drinks and women on me!\"
+The signal never comes. You're nervous, and decide to venture out into the hall to check, stepping over the slain creatures.
+Behind you, the doors slam shut. Screaming, then silence.
+You run. You always regretted running.[/italic]
+                                
+                                ''')
+                  time.sleep(8)
+                  print('''the tenons twist within the mortise behind you.
+a perfect fit.
+a perfect seal.
+
+the door closes.
+the maze shifts.
+the next you will come.
+
+and they will find a gaol.
+and a hymn.
+and a corpse that still remembers.
+and a whisper in the dark:
+
+"one must judge. one must suffer. one must remain."
+
+you remain.
+                        
+
+''')
+                  time.sleep(6)
+                  credits()
+                  time.sleep(4)
+                  restart = str(input("Would you like to restart? y or n:  "))
+                  if restart == "y":
+                      pygame.mixer.stop()
+                      script()
+                  else:
+                      print("Farwell, for now...")
+                      time.sleep(2)
+                      quit()
+                      break
+
+
                   if playerhp <= 0:
                       print('''
                             
@@ -1024,12 +1194,14 @@ a voice whispers in the darkness:
                             ''')
                       restart = str(input("Would you like to restart? y or n:  "))
                       if restart == "y":
+                          pygame.mixer.stop()
                           script()
                       else:
                         print("Farwell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
+                        pygame.mixer.stop()
                         break
                   del rooms[currentroom]['boss']
               elif bosses[action[1]]['enemyhp'] > playeratk:
@@ -1056,26 +1228,43 @@ a voice whispers in the darkness:
                             ''')
                       restart = str(input("Would you like to restart? y or n:  "))
                       if restart == "y":
+                          pygame.mixer.stop()
                           script()
                       else:
                         print("Farwell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
+                        pygame.mixer.stop()
                         break
 
 
           else:
             print('can\'t do ' + action[1] + '!')
+      else:
+            print('please enter a valid command')
 
       #if a player has defeated all four bosses, going to the silent threshold with all the keys will send them into final boss room
       if currentroom == 'the silent threshold' and 'tenon of many ends' in inventory and 'tenon of unspoken shapes' in inventory and 'tenon of hollow praise' in inventory and 'tenon of broken oaths' in inventory:
-        print('''
+        console.print('''[italic]
 ============================================================================================================================================
 the tenon pieces in your inventory seem to resonate with the grand door, and you pull them out and slot them into
 the mortise. the door opens slowly without a sound, and your breath catches in your throat as you step through.
-============================================================================================================================================''')
+============================================================================================================================================[/italic]''')
         currentroom = 'the atrium of unmaking'
         showstatus()
 
-script()
+
+try:
+    script()
+except Exception as e:
+    crash=["Error on line {}".format(sys.exc_info()[-1].tb_lineno),"\n",e]
+    timeX=str(time.time())
+    print(crash)
+    with open("FALSE-SOULS-CRASH.txt","w") as crashLog:
+        for i in crash:
+            i=str(i)
+            crashLog.write(datetime.datetime.now())
+            crashLog.write(i)
+
+
