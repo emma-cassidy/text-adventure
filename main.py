@@ -69,12 +69,12 @@ select your starting character:
 ============================================================================================================================================
     ''')
       while True:
-        char_class = input("choose your class. enter cleric, warrior or rogue: ").lower()
+        char_class = input("choose your class. enter cleric, warrior or rogue: ").lower().strip()
         if char_class in ["cleric", "warrior", "rogue", "altmer",]:
             break
         else:
             print("please choose a valid class.")
-      char_name = input("name your character: ")
+      char_name = input("name your character: ").strip()
       if len(char_name) > 12:
           print("error; max length 12")
           time.sleep(3)
@@ -744,7 +744,7 @@ this is where it ends.
             pygame.mixer.stop()
             script()
         else:
-            print("Farwell, be stronger next time")
+            print("Farewell, be stronger next time")
             time.sleep(2)
             credits()
             time.sleep(5)
@@ -752,7 +752,7 @@ this is where it ends.
             quit()
             break
       #get the player's next 'action' as a list array (verb, noun)
-      action = input('>')       
+      action = input('>').strip()      
       action = action.split(" ", 1)
 
       if len(action) < 2:
@@ -880,7 +880,7 @@ x    □ __ □ __ □ __ □
                      pygame.mixer.stop()
                      script()
                   else:
-                      print("Farwell, be stronger next time")
+                      print("Farewell, be stronger next time")
                       time.sleep(2)
                       credits()
                       time.sleep(5)
@@ -914,7 +914,7 @@ x    □ __ □ __ □ __ □
                         pygame.mixer.stop()
                         script()
                       else:
-                        print("Farwell, be stronger next time")
+                        print("Farewell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
@@ -941,7 +941,7 @@ x    □ __ □ __ □ __ □
                   pygame.mixer.stop()
                   script()
               else:
-                  print("Farwell, be stronger next time")
+                  print("Farewell, be stronger next time")
                   time.sleep(2)
                   credits()
                   time.sleep(5)
@@ -996,7 +996,7 @@ x    □ __ □ __ □ __ □
                           pygame.mixer.stop()
                           script()
                       else:
-                        print("Farwell, be stronger next time")
+                        print("Farewell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
@@ -1030,7 +1030,7 @@ x    □ __ □ __ □ __ □
                           pygame.mixer.stop()
                           script()
                       else:
-                        print("Farwell, be stronger next time")
+                        print("Farewell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
@@ -1197,7 +1197,7 @@ you remain.
                           pygame.mixer.stop()
                           script()
                       else:
-                        print("Farwell, be stronger next time")
+                        print("Farewell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
@@ -1231,7 +1231,7 @@ you remain.
                           pygame.mixer.stop()
                           script()
                       else:
-                        print("Farwell, be stronger next time")
+                        print("Farewell, be stronger next time")
                         time.sleep(2)
                         credits()
                         time.sleep(5)
